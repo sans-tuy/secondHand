@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "631236498919",
+    "project_id": "secondhand-69155",
+    "storage_bucket": "secondhand-69155.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:631236498919:android:20f511770be01fdce0d942",
+        "android_client_info": {
+          "package_name": "com.secondhand"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "631236498919-t9fafennjn0smnei3osmctqatu4g47p1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.secondhand",
+            "certificate_hash": "23d7bb7f8866f37c663dd4119f776ab2c52d53ad"
+          }
+        },
+        {
+          "client_id": "631236498919-41503fb6o47v4u07o2s2rsr5i5h7hopn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBR_Cn_Lc_M7u-AVw2MvUX3Q-xNFcFKeKI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "631236498919-41503fb6o47v4u07o2s2rsr5i5h7hopn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
