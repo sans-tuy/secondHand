@@ -23,6 +23,7 @@ export default function App() {
 
   return (
     <View>
+      <View></View>
       <Button
         title="Sign In"
         onPress={() =>
