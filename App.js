@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, Button, Text} from 'react-native';
+import {View, Button} from 'react-native';
 import crashlytics from '@react-native-firebase/crashlytics';
 
 async function onSignIn(user) {
@@ -23,9 +23,7 @@ export default function App() {
 
   return (
     <View>
-      <View>
-        <Text>Test</Text>
-      </View>
+      <View></View>
       <Button
         title="Sign In"
         onPress={() =>
