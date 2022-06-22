@@ -16,26 +16,33 @@ const MainApp = () => {
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
-        tabBarIcon: ({focused, size, color}) => {
+        tabBarIcon: ({focused}) => {
           let iconName;
+          let size = 25;
+          let color = focused ? '#7126B5' : 'gray';
+
           if (route.name === 'Home') {
-            iconName = focused ? 'home' : 'home-outline';
+            iconName = 'home-outline';
+            return <Ionic name={iconName} size={size} color={color} />;
           } else if (route.name === 'Notifikasi') {
-            iconName = focused ? 'notifications' : 'ios-notifications-outline';
+            iconName = 'ios-notifications-outline';
+            return <Ionic name={iconName} size={size} color={color} />;
           } else if (route.name === 'Jual') {
-            iconName = focused ? 'add-circle' : 'add-circle-outline';
+            iconName = 'add-circle-outline';
+            return <Ionic name={iconName} size={size} color={color} />;
           } else if (route.name === 'Daftar Jual') {
-            iconName = focused ? 'list' : 'list-outline';
+            iconName = 'list-outline';
+            return <Ionic name={iconName} size={size} color={color} />;
           } else if (route.name === 'Akun') {
-            iconName = focused ? 'person' : 'person-outline';
+            iconName = 'person-outline';
+            return <Ionic name={iconName} size={size} color={color} />;
           }
-          return <Ionic name={iconName} size={size} color="#7126B5" />;
         },
         tabBarLabel: ({focused}) => {
           let titleStyle = {
             fontSize: 12,
             fontWeight: focused ? 'bold' : '500',
-            color: focused ? '#7126B5' : 'black',
+            color: focused ? '#7126B5' : 'gray',
           };
           if (route.name === 'Home') {
             return <Text style={titleStyle}>{route.name}</Text>;
