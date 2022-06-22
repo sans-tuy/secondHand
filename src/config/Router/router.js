@@ -1,8 +1,7 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NavigationContainer} from '@react-navigation/native';
 import Ionic from 'react-native-vector-icons/Ionicons';
 import Home from '../../pages/Home/index';
 import Notification from '../../pages/Notification';
@@ -30,7 +29,25 @@ const MainApp = () => {
           } else if (route.name === 'Akun') {
             iconName = focused ? 'person' : 'person-outline';
           }
-          return <Ionic name={iconName} size={size} color={color} />;
+          return <Ionic name={iconName} size={size} color="#7126B5" />;
+        },
+        tabBarLabel: ({focused}) => {
+          let titleStyle = {
+            fontSize: 12,
+            fontWeight: focused ? 'bold' : '500',
+            color: focused ? '#7126B5' : 'black',
+          };
+          if (route.name === 'Home') {
+            return <Text style={titleStyle}>{route.name}</Text>;
+          } else if (route.name === 'Notifikasi') {
+            return <Text style={titleStyle}>{route.name}</Text>;
+          } else if (route.name === 'Jual') {
+            return <Text style={titleStyle}>{route.name}</Text>;
+          } else if (route.name === 'Daftar Jual') {
+            return <Text style={titleStyle}>{route.name}</Text>;
+          } else if (route.name === 'Akun') {
+            return <Text style={titleStyle}>{route.name}</Text>;
+          }
         },
       })}>
       <Tab.Screen name="Home" component={Home} options={{headerShown: false}} />
