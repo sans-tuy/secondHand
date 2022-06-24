@@ -1,14 +1,17 @@
 import {
   Image,
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
+import Ionic from 'react-native-vector-icons/Ionicons';
 
 const Login = () => {
+  const [eye, seteye] = useState('eye-outline');
   return (
     <View style={styles.container}>
       <View>
@@ -27,12 +30,12 @@ const Login = () => {
         <Text style={{color: 'black'}}>Password</Text>
         <View>
           <TextInput placeholder="Masukkan password" style={styles.inputText} />
-          <TouchableOpacity style={styles.eye}>
-            <Image
-              source={require('../../assets/icon/fi_eye.png')}
-              style={styles.icon}
-            />
-          </TouchableOpacity>
+          <Pressable
+            style={styles.eye}
+            onPressIn={() => seteye('eye-off-outline')}
+            onPressOut={() => seteye('eye-outline')}>
+            <Ionic name={eye} size={25} color={'#7126B5'} />
+          </Pressable>
         </View>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Masuk</Text>
