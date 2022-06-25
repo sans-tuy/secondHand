@@ -8,6 +8,8 @@ import Notification from '../../pages/Notification';
 import Sell from '../../pages/Sell';
 import SellList from '../../pages/SellList';
 import Account from '../../pages/Account';
+import Login from '../../pages/Login';
+import Register from '../../pages/Register';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -84,6 +86,16 @@ const Router = () => {
       <Stack.Screen
         name="MainApp"
         component={MainApp}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Register"
+        component={Register}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
