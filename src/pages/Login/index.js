@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import Ionic from 'react-native-vector-icons/Ionicons';
+const arrow = require('../../assets/Icon/fi_arrow-left.png');
 
 const Login = () => {
   const [eye, seteye] = useState('eye-outline');
@@ -16,10 +17,7 @@ const Login = () => {
     <View style={styles.container}>
       <View>
         <TouchableOpacity>
-          <Image
-            source={require('../../assets/icon/fi_arrow-left.png')}
-            style={styles.icon}
-          />
+          <Image source={arrow} style={styles.icon} />
         </TouchableOpacity>
         <Text style={styles.title}>Masuk</Text>
         <Text style={{color: 'black'}}>Email</Text>
