@@ -9,27 +9,27 @@ const Account = () => {
         <View style={styles.wrapperIcon}>
           <Image
             style={styles.icon}
-            source={require('../../assets/Icon/fi_camera.png')}
+            source={require('../../assets/icon/fi_camera.png')}
           />
         </View>
       </View>
       <View style={styles.wrapperText}>
         <Image
-          source={require('../../assets/Icon/fi_edit-3.png')}
+          source={require('../../assets/icon/fi_edit-3.png')}
           style={styles.icon}
         />
         <Text style={styles.text}>Ubah Akun</Text>
       </View>
       <View style={styles.wrapperText}>
         <Image
-          source={require('../../assets/Icon/fi_settings.png')}
+          source={require('../../assets/icon/fi_settings.png')}
           style={styles.icon}
         />
         <Text style={styles.text}>Pengaturan Akun</Text>
       </View>
       <View style={styles.wrapperText}>
         <Image
-          source={require('../../assets/Icon/fi_log-out.png')}
+          source={require('../../assets/icon/fi_log-out.png')}
           style={styles.icon}
         />
         <Text style={styles.text}>Keluar</Text>
