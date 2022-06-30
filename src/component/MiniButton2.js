@@ -1,14 +1,14 @@
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
-
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useSelector} from 'react-redux';
 
 const MiniButton2 = ({onPressSearch, textButton, iconName}) => {
+  const selectedChip = useSelector(state => state.global.selectedChip);
   const [bgColor, setbgColor] = useState('#E2D4F0');
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        onFocus={() => setbgColor('#7126B5')}
         style={[styles.buttonContainerInactive, {backgroundColor: bgColor}]}
         onPress={onPressSearch}>
         <Icon name={iconName} color="#3C3C3C" size={25} />
