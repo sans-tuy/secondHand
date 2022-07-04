@@ -77,7 +77,11 @@ function Home() {
   const [click, setClick] = useState(false);
 
   const handleOnPressButtonSearch = () => {
-    console.log('Hello Button');
+    alert('Ini Button');
+  };
+
+  const handleOnPressCategoryn = () => {
+    alert('Ini Category');
   };
 
   return (
@@ -132,6 +136,7 @@ function Home() {
                   data={dummy}
                   renderItem={({item}) => (
                     <Category
+                      onPress={handleOnPressCategoryn}
                       title={item.title}
                       image={item.image}
                       category={item.category}

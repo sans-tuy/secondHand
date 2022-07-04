@@ -8,10 +8,10 @@ import {
 } from 'react-native';
 import React from 'react';
 
-const Category = ({image, title, category, price}) => {
+const Category = ({onPress, image, title, category, price}) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.cardStyle}>
+      <TouchableOpacity onPress={onPress} style={styles.cardStyle}>
         <View style={styles.containerImage}>
           <Image source={image} style={styles.image} />
         </View>
@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     height: windowHeight * 0.14,
   },
   image: {
+    height: '100%',
     width: '100%',
     resizeMode: 'stretch',
   },
