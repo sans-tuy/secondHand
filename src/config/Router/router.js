@@ -10,6 +10,8 @@ import SellList from '../../pages/SellList';
 import Account from '../../pages/Account';
 import Login from '../../pages/Login';
 import Register from '../../pages/Register';
+import PreviewProduct from '../../pages/PreviewProduct';
+import PreviewProductSeller from '../../pages/PreviewProductSeller';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -82,7 +84,7 @@ const MainApp = () => {
 
 const Router = () => {
   return (
-    <Stack.Navigator initialRouteName="MainApp">
+    <Stack.Navigator initialRouteName="MaindApp">
       <Stack.Screen
         name="MainApp"
         component={MainApp}
@@ -96,6 +98,16 @@ const Router = () => {
       <Stack.Screen
         name="Register"
         component={Register}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="PreviewProduct"
+        component={PreviewProduct}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="PreviewProductSeller"
+        component={PreviewProductSeller}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
