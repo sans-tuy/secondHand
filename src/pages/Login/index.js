@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import Ionic from 'react-native-vector-icons/Ionicons';
-const arrow = require('../../assets/Icon/fi_arrow-left.png');
+const arrow = require('../../assets/icon/fi_arrow-left.png');
 
 const Login = () => {
   const [eye, seteye] = useState('eye-outline');

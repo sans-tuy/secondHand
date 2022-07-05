@@ -15,6 +15,7 @@ const TYPES = [
 const ROUNDED = ['small', 'medium', 'large'];
 
 export default function MyButton({
+  disabled,
   children,
   onPress,
   type,
@@ -60,7 +61,7 @@ export default function MyButton({
   };
 
   return (
-    <TouchableOpacity style={btnStyle} onPress={onPress}>
+    <TouchableOpacity style={btnStyle} disabled={disabled} onPress={onPress}>
       <Text style={{color: '#fff', fontSize: 14, fontWeight: '500'}}>
         {label}
       </Text>

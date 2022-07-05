@@ -11,10 +11,9 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Colors} from '../../utils/colors';
-
 import Carousel from '../../component/Carousel';
 import Button from '../../component/Button';
-import BottomPopup from '../../component/BottomPopup';
+
 import Icon from 'react-native-vector-icons/AntDesign';
 
 const dummy = [
@@ -32,62 +31,13 @@ const dummy = [
   },
 ];
 
-const ModalPopup = ({visible, children}) => {
-  const [showModal, setShowModal] = useState(visible);
-  useEffect(() => {
-    toggleModal();
-  }, [visible]);
-
-  const toggleModal = () => {
-    if (visible) {
-      setShowModal(true);
-    } else {
-      setShowModal(false);
-    }
-  };
-
-  return (
-    <Modal transparent visible={showModal}>
-      <View style={styles.modalBackground}>
-        <View style={[styles.modalContainer]}>{children}</View>
-      </View>
-    </Modal>
-  );
-};
-
-const PreviewProduct = () => {
-  const [show, setShow] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const [bid, setBid] = useState(false);
-
+const PreviewProductSeller = ({navigation}) => {
   return (
     <View>
       <ScrollView>
         <Carousel images={dummy} />
-        {/* modal 
-        popup section */}
-        <View>
-          <ModalPopup visible={visible}>
-            <View style={{justifyContent: 'center', flexDirection: 'row'}}>
-              <Text
-                style={{
-                  color: '#fff',
-                  fontSize: 16,
-                  fontWeight: '500',
-                  marginRight: 15,
-                }}>
-                Harga tawarmu berhasil dikirim ke penjual
-              </Text>
-              <TouchableOpacity onPress={() => setVisible(false)}>
-                <Icon name="close" size={20} color="#fff" />
-              </TouchableOpacity>
-            </View>
-          </ModalPopup>
-        </View>
-        {/* //modal 
-        popup section */}
         {/* content
-         section */}
+           section */}
         <View style={styles.cardDesc}>
           <Text style={styles.textTitle}>Jam Tangan Casio</Text>
           <Text style={styles.type}>Aksesoris</Text>
@@ -128,112 +78,26 @@ const PreviewProduct = () => {
       </ScrollView>
       <View style={styles.buttonWrapper}>
         <Button
-          disabled={bid ? true : false}
-          onPress={() => setShow(true)}
+          onPress={() => {
+            navigation.navigate('Daftar Jual');
+          }}
           rounded={'large'}
-          type={bid ? 'secondary' : 'primary'}
+          type={'primary'}
           size={'large'}
-          label={'Saya Tertarik dan ingin nego'}
+          label={'Terbitkan'}
         />
       </View>
       {/* content
-       section  */}
-      {/* modal
-       bottom popup 
-       section */}
-      <BottomPopup
-        ennableBackdropDismiss
-        onDismiss={() => {
-          setShow(false);
-        }}
-        show={show}>
-        <ScrollView>
-          <View
-            style={{padding: 32, justifyContent: 'center', marginBottom: 100}}>
-            <Text
-              style={{
-                marginBottom: 16,
-                color: Colors.text,
-                fontSize: 14,
-                fontWeight: '500',
-                fontStyle: 'normal',
-              }}>
-              Masukan Harga Tawaran mu
-            </Text>
-
-            <Text
-              style={{
-                color: Colors.textSecond,
-                fontSize: 14,
-                fontWeight: '500',
-                fontStyle: 'normal',
-              }}>
-              Harga tawaranmu akan diketahui penual, jika penjual cocok kamu
-              akan segera dihubungi penjual.
-            </Text>
-
-            <View style={styles.cardProd}>
-              <View style={{marginRight: 16}}>
-                <Image
-                  source={require('../../assets/Images/profilePrev.png')}
-                />
-              </View>
-              <View>
-                <Text style={styles.nama}>Jam Tangan Casio</Text>
-                <Text style={styles.price}>
-                  {' '}
-                  Rp
-                  {(250000)
-                    .toString()
-                    .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1.')}
-                </Text>
-              </View>
-            </View>
-
-            <View style={{paddingTop: 16}}>
-              <Text style={styles.price}>Harga Tawar</Text>
-              <View>
-                <TextInput placeholder="Rp.0,00" style={styles.inputText} />
-              </View>
-            </View>
-
-            <Button
-              onPress={() => {
-                setVisible(true);
-                setShow(false);
-                setBid(true);
-              }}
-              rounded={'large'}
-              type={'primary'}
-              label={'Kirim'}
-            />
-          </View>
-        </ScrollView>
-      </BottomPopup>
-      {/* modal
-       bottom popup section */}
+         section  */}
     </View>
   );
 };
 
-export default PreviewProduct;
+export default PreviewProductSeller;
 
 const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
-  modalBackground: {
-    flex: 1,
-
-    marginTop: 100,
-    alignItems: 'center',
-  },
-  modalContainer: {
-    width: '80%',
-    backgroundColor: '#73CA5C',
-    paddingHorizontal: 20,
-    paddingVertical: 30,
-    elevation: 20,
-  },
   cardDesc: {
     marginHorizontal: 20,
     backgroundColor: '#ffffff',
