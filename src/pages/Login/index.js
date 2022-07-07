@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   Pressable,
   StyleSheet,
@@ -9,10 +10,36 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import Ionic from 'react-native-vector-icons/Ionicons';
+import axios from 'axios';
+import * as navigation from '../../config/Router/rootNavigation';
+import {useDispatch} from 'react-redux';
+import {setAccessToken} from '../../config/Redux/reducer';
 const arrow = require('../../assets/icon/fi_arrow-left.png');
 
 const Login = () => {
   const [eye, seteye] = useState('eye-outline');
+  const [email, setemail] = useState('');
+  const [password, setpassword] = useState('');
+  const dispatch = useDispatch();
+  const data = {
+    email: email,
+    password: password,
+  };
+  const validate = () => {
+    if (email == '' || password == '') {
+      Alert.alert('All fields are required');
+      return false;
+    }
+    axios
+      .post('https://market-final-project.herokuapp.com/auth/login', data)
+      .then(val => {
+        console.log(val.data);
+        dispatch(setAccessToken(val.data.access_token));
+        navigation.navigate('MainApp');
+      })
+      .catch(err => console.log(err));
+  };
+
   return (
     <View style={styles.container}>
       <View>
@@ -23,11 +50,18 @@ const Login = () => {
         <Text style={{color: 'black'}}>Email</Text>
         <TextInput
           placeholder="Contoh:johndee@gmail.com"
+          value={email}
+          onChangeText={val => setemail(val)}
           style={styles.inputText}
         />
         <Text style={{color: 'black'}}>Password</Text>
         <View>
-          <TextInput placeholder="Masukkan password" style={styles.inputText} />
+          <TextInput
+            placeholder="Masukkan password"
+            style={styles.inputText}
+            value={password}
+            onChangeText={val => setpassword(val)}
+          />
           <Pressable
             style={styles.eye}
             onPressIn={() => seteye('eye-off-outline')}
@@ -35,13 +69,13 @@ const Login = () => {
             <Ionic name={eye} size={25} color={'#7126B5'} />
           </Pressable>
         </View>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={() => validate()}>
           <Text style={styles.buttonText}>Masuk</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.navigateText}>
         <Text style={styles.footerText}>Belum punya akun?</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
           <Text style={styles.textClick}> Daftar di sini</Text>
         </TouchableOpacity>
       </View>
