@@ -1,7 +1,8 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View,TouchableOpacity} from 'react-native';
 import React from 'react';
 
-const Account = () => {
+
+const Account = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Akun Saya</Text>
@@ -9,27 +10,29 @@ const Account = () => {
         <View style={styles.wrapperIcon}>
           <Image
             style={styles.icon}
-            source={require('../../assets/icon/fi_camera.png')}
+            source={require('../../assets/Icon/fi_camera.png')}
           />
         </View>
       </View>
       <View style={styles.wrapperText}>
         <Image
-          source={require('../../assets/icon/fi_edit-3.png')}
-          style={styles.icon}
+        source={require('../../assets/Icon/fi_edit-3.png')}
+        style={styles.icon}
         />
-        <Text style={styles.text}>Ubah Akun</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('EditAccount')}>
+          <Text style={styles.text}>Ubah akun</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.wrapperText}>
         <Image
-          source={require('../../assets/icon/fi_settings.png')}
+          source={require('../../assets/Icon/fi_settings.png')}
           style={styles.icon}
         />
         <Text style={styles.text}>Pengaturan Akun</Text>
       </View>
       <View style={styles.wrapperText}>
         <Image
-          source={require('../../assets/icon/fi_log-out.png')}
+          source={require('../../assets/Icon/fi_log-out.png')}
           style={styles.icon}
         />
         <Text style={styles.text}>Keluar</Text>

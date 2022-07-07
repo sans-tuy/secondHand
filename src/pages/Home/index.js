@@ -16,7 +16,7 @@ import Category from '../../component/Category';
 import SearchBar from '../../component/SearchBar';
 import MiniButton from '../../component/MiniButton';
 
-const icon = require('../../assets/icon/png_gift_88837.png');
+const icon = require('../../assets/Icon/png_gift_88837.png');
 
 function Home() {
   const DATA = [

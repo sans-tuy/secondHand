@@ -17,7 +17,7 @@ const Register = () => {
       <View>
         <TouchableOpacity>
           <Image
-            source={require('../../assets/icon/fi_arrow-left.png')}
+            source={require('../../assets/Icon/fi_arrow-left.png')}
             style={styles.icon}
           />
         </TouchableOpacity>
