@@ -7,5 +7,3 @@ export function navigate(name) {
     navigationRef.navigate(name);
   }
 }
-
-// add other navigation functions that you need and export them

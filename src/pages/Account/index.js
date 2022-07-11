@@ -1,7 +1,12 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import * as navigation from '../../config/Router/rootNavigation';
+import {setAccessToken} from '../../config/Redux/reducer';
 
 const Account = () => {
+  const dispatch = useDispatch();
+  const token = useSelector(state => state.global.accessToken);
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Akun Saya</Text>
@@ -27,13 +32,18 @@ const Account = () => {
         />
         <Text style={styles.text}>Pengaturan Akun</Text>
       </View>
-      <View style={styles.wrapperText}>
+      <Pressable
+        style={styles.wrapperText}
+        onPress={() => {
+          dispatch(setAccessToken(null));
+          navigation.navigate('Login');
+        }}>
         <Image
           source={require('../../assets/icon/fi_log-out.png')}
           style={styles.icon}
         />
         <Text style={styles.text}>Keluar</Text>
-      </View>
+      </Pressable>
       <View style={{alignItems: 'center'}}>
         <Text>Version 1.0.0</Text>
       </View>
