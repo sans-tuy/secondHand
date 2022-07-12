@@ -130,21 +130,17 @@ function Home() {
               />
             </View>
             <View style={styles.containerCard}>
-              <ScrollView horizontal>
-                <FlatList
-                  numColumns={2}
-                  data={dummy}
-                  renderItem={({item}) => (
-                    <Category
-                      onPress={handleOnPressCategoryn}
-                      title={item.title}
-                      image={item.image}
-                      category={item.category}
-                      price={item.price}
-                    />
-                  )}
-                />
-              </ScrollView>
+              {dummy.map((item, index) => (
+                <View key={index} style={{width: '50%'}}>
+                  <Category
+                    onPress={handleOnPressCategoryn}
+                    title={item.title}
+                    image={item.image}
+                    category={item.category}
+                    price={item.price}
+                  />
+                </View>
+              ))}
             </View>
           </View>
         </ScrollView>
@@ -174,7 +170,10 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
   },
   containerCard: {
+    flex: 1,
     flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'flex-start',
   },
   linearGradient: {
     alignItems: 'center',
