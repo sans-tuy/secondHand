@@ -9,6 +9,10 @@ import {
   ScrollView,
 } from 'react-native';
 
+import axios from 'axios';
+import {useDispatch} from 'react-redux';
+import {setAccessToken} from '../../config/Redux/reducer';
+
 import LinearGradient from 'react-native-linear-gradient';
 
 import Banner from '../../component/Banner';
@@ -19,6 +23,8 @@ import MiniButton from '../../component/MiniButton';
 const icon = require('../../assets/icon/png_gift_88837.png');
 
 function Home() {
+  const [dataProduct, setDataProduct] = useState([]);
+
   const DATA = [
     {
       id: 'id1',
@@ -72,6 +78,21 @@ function Home() {
       price: '3000000',
     },
   ];
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    axios
+      .get('https://market-final-project.herokuapp.com/buyer/product')
+      .then(val => {
+        const data = val.data;
+        dispatch(setAccessToken(val.data.access_token));
+        setDataProduct(data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
+  // console.log(dataProduct);
 
   const [value, setValue] = useState('');
   const [click, setClick] = useState(false);
@@ -130,17 +151,18 @@ function Home() {
               />
             </View>
             <View style={styles.containerCard}>
-              {dummy.map((item, index) => (
-                <View key={index} style={{width: '50%'}}>
-                  <Category
-                    onPress={handleOnPressCategoryn}
-                    title={item.title}
-                    image={item.image}
-                    category={item.category}
-                    price={item.price}
-                  />
-                </View>
-              ))}
+              {dataProduct &&
+                dataProduct.map((item, index) => (
+                  <View key={index} style={{width: '50%'}}>
+                    <Category
+                      onPress={handleOnPressCategoryn}
+                      title={item.name}
+                      image={item.image_url}
+                      category={item.Categories}
+                      price={item.base_price}
+                    />
+                  </View>
+                ))}
             </View>
           </View>
         </ScrollView>
