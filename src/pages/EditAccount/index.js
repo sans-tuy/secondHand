@@ -76,7 +76,7 @@ const Profile = ({ navigation: { goBack } }) => {
             <Text style={{ color: 'black', marginTop: '6%' }}>Alamat*</Text>
             <View>
               <TextInput
-                placeholder="Contoh: Jalan Ikan Hiu 33"
+                placeholder="Contoh: Jalan Ikan Hiu 333"
                 style={styles.inputTextAlamat}
               />
             </View>
