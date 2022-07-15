@@ -14,8 +14,6 @@ import PreviewProduct from '../../pages/PreviewProduct';
 import PreviewProductSeller from '../../pages/PreviewProductSeller';
 import Profile from '../../pages/Profile';
 import EditAccount from "../../pages/EditAccount";
-
-
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -88,7 +86,7 @@ const MainApp = () => {
 
 const Router = () => {
   return (
-    <Stack.Navigator initialRouteName="EditAccount">
+    <Stack.Navigator initialRouteName="MainApp">
       <Stack.Screen
         name="MainApp"
         component={MainApp}
