@@ -3,6 +3,9 @@ import {createSlice} from '@reduxjs/toolkit';
 const initialState = {
   selectedChip: 1,
   accessToken: null,
+  favorite: [],
+  notif: [],
+  product: [],
 };
 
 export const globalSlice = createSlice({
@@ -15,10 +18,25 @@ export const globalSlice = createSlice({
     setAccessToken: (state, action) => {
       state.accessToken = action.payload;
     },
+    setFavorite: (state, action) => {
+      state.favorite = action.payload;
+    },
+    setNotif: (state, action) => {
+      state.notif = action.payload;
+    },
+    setProduct: (state, action) => {
+      state.product = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const {setSelectedChip, setAccessToken} = globalSlice.actions;
+export const {
+  setSelectedChip,
+  setAccessToken,
+  setFavorite,
+  setNotif,
+  setProduct,
+} = globalSlice.actions;
 
 export default globalSlice.reducer;

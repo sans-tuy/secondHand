@@ -12,11 +12,14 @@ import MiniButton from '../../component/MiniButton2';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Notif from '../../component/notif';
 import {setSelectedChip} from '../../config/Redux/reducer';
+import {useEffect} from 'react';
+import {ApiGetWishlist} from '../../config/Api';
+import * as navigation from '../../config/Router/rootNavigation';
 
 function Produk() {
   return (
     <View style={styles.listProduct}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('DetailProduct')}>
         <View style={styles.boxAdd}>
           <Icon size={20} name={'plus'} />
           <Text>Tambah Produk</Text>
@@ -38,26 +41,27 @@ function Produk() {
 }
 
 function Favorite() {
-  const notif = [
-    {
-      titleNotif: 'Penawaran Produk',
-      textNotif: 'Jam Tangan Casio Rp 250.000',
-      dateNotif: '19 Apr, 12:00',
-    },
-  ];
+  const favorite = useSelector(state => state.global.favorite);
+  // const notif = [
+  //   {
+  //     titleNotif: 'Penawaran Produk',
+  //     textNotif: 'Jam Tangan Casio Rp 250.000',
+  //     dateNotif: '19 Apr, 12:00',
+  //   },
+  // ];
   return (
     <View style={{flex: 1}}>
-      {notif.length == 0 ? (
+      {favorite.length == 0 ? (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <Image source={require('../../assets/Images/diminati.png')} />
         </View>
       ) : (
-        notif.map((data, index) => (
+        favorite.map((data, index) => (
           <Notif
-            image={'../../assets/Images/jam1.png'}
-            titleNotif={data.titleNotif}
-            textNotif={data.textNotif}
-            dateNotif={data.dateNotif}
+            image={{uri: data.image_url}}
+            titleNotif={data.name}
+            textNotif={data.description}
+            dateNotif={data.updated_at}
           />
         ))
       )}
@@ -75,7 +79,11 @@ function Terjual() {
 
 const SellList = () => {
   const selectedChip = useSelector(state => state.global.selectedChip);
+  const token = useSelector(state => state.global.accessToken);
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(ApiGetWishlist(token));
+  }, []);
 
   return (
     <View style={styles.container}>

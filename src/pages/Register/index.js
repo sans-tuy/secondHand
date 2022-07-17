@@ -11,13 +11,14 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import Ionic from 'react-native-vector-icons/Ionicons';
-import axios from 'axios';
+import {useDispatch} from 'react-redux';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import * as navigation from '../../config/Router/rootNavigation';
-import {Button} from '@react-native-material/core';
+import {ApiRegister} from '../../config/Api';
 
 const Register = () => {
-  const [eye, seteye] = useState('eye-outline');
+  const [eye, seteye] = useState('eye-off-outline');
+  const [hide, sethide] = useState(true);
   const [email, setemail] = useState('');
   const [phone, setphone] = useState('');
   const [nama, setnama] = useState('');
@@ -26,131 +27,80 @@ const Register = () => {
   const [password, setpassword] = useState('');
   const [response, setResponse] = useState([]);
   const [image, setimage] = useState();
+  const dispatch = useDispatch();
   const data = {
     email: email,
     password: password,
-    image: image,
-    phone: phone,
-    city: city,
     name: nama,
-    address: address,
   };
   const validate = () => {
-    if (
-      email == '' ||
-      password == '' ||
-      image == '' ||
-      nama == '' ||
-      address == '' ||
-      city == '' ||
-      phone == ''
-    ) {
+    if (email == '' || password == '' || nama == '') {
       Alert.alert('All fields are required');
       return false;
     }
-    axios
-      .post('https://market-final-project.herokuapp.com/auth/register', data)
-      .then(val => {
-        console.log(val.data);
-        navigation.navigate('Login');
-      })
-      .catch(err => console.log(err));
+    dispatch(ApiRegister(data));
   };
   const chooseImage = React.useCallback(options => {
     launchImageLibrary(options, setResponse);
   }, []);
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <View>
+        <TouchableOpacity>
+          <Image
+            source={require('../../assets/icon/fi_arrow-left.png')}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+        <Text style={styles.title}>Daftar</Text>
+        <Text style={{color: 'black'}}>Nama</Text>
+        <TextInput
+          placeholder="Nama Lengkap"
+          style={styles.inputText}
+          value={nama}
+          onChangeText={val => setnama(val)}
+        />
+
+        <Text style={{color: 'black'}}>Email</Text>
+        <TextInput
+          placeholder="Contoh:johndee@gmail.com"
+          style={styles.inputText}
+          value={email}
+          onChangeText={val => setemail(val)}
+        />
+
+        <Text style={{color: 'black'}}>Buat Password</Text>
         <View>
-          <TouchableOpacity>
-            <Image
-              source={require('../../assets/icon/fi_arrow-left.png')}
-              style={styles.icon}
-            />
-          </TouchableOpacity>
-          <Text style={styles.title}>Daftar</Text>
-          <Text style={{color: 'black'}}>Nama</Text>
           <TextInput
-            placeholder="Nama Lengkap"
+            placeholder="Buat password"
             style={styles.inputText}
-            value={nama}
-            onChangeText={val => setnama(val)}
+            value={password}
+            secureTextEntry={hide}
+            onChangeText={val => setpassword(val)}
           />
-
-          <Text style={{color: 'black'}}>Email</Text>
-          <TextInput
-            placeholder="Contoh:johndee@gmail.com"
-            style={styles.inputText}
-            value={email}
-            onChangeText={val => setemail(val)}
-          />
-
-          <Text style={{color: 'black'}}>Buat Password</Text>
-          <View>
-            <TextInput
-              placeholder="Buat password"
-              style={styles.inputText}
-              value={password}
-              onChangeText={val => setpassword(val)}
-            />
-            <Pressable
-              style={styles.eye}
-              onPressIn={() => seteye('eye-off-outline')}
-              onPressOut={() => seteye('eye-outline')}>
-              <Ionic name={eye} size={25} color={'#7126B5'} />
-            </Pressable>
-          </View>
-          <Text style={{color: 'black'}}>Address</Text>
-          <TextInput
-            placeholder="Jl. Gundih 1 no.25/b"
-            style={styles.inputText}
-            value={address}
-            onChangeText={val => setaddress(val)}
-          />
-          <Text style={{color: 'black'}}>Phone number</Text>
-          <TextInput
-            placeholder="Contoh:087863824653"
-            style={styles.inputText}
-            value={phone}
-            onChangeText={val => setphone(val)}
-          />
-          <Text style={{color: 'black'}}>City</Text>
-          <TextInput
-            placeholder="Contoh:Surabaya"
-            style={styles.inputText}
-            value={city}
-            onChangeText={val => setcity(val)}
-          />
-
-          <Text style={{color: 'black'}}>Image</Text>
           <Pressable
-            onPress={() => {
-              chooseImage('library', {
-                maxHeight: 200,
-                maxWidth: 200,
-                selectionLimit: 0,
-                mediaType: 'photo',
-                includeBase64: false,
-              });
+            style={styles.eye}
+            onPressIn={() => {
+              seteye('eye-outline');
+              sethide(false);
+            }}
+            onPressOut={() => {
+              seteye('eye-off-outline');
+              sethide(true);
             }}>
-            <Text>Choose image</Text>
+            <Ionic name={eye} size={25} color={'#7126B5'} />
           </Pressable>
-          <Pressable onPress={() => setimage(response['assets'][0]['uri'])}>
-            <Text>Submit image</Text>
-          </Pressable>
-
-          <TouchableOpacity style={styles.button} onPress={() => validate()}>
-            <Text style={styles.buttonText}>Daftar</Text>
-          </TouchableOpacity>
         </View>
-        <View style={styles.navigateText}>
-          <Text style={styles.footerText}>Sudah punya akun?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.textClick}> Masuk di sini</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+        <TouchableOpacity style={styles.button} onPress={() => validate()}>
+          <Text style={styles.buttonText}>Daftar</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.navigateText}>
+        <Text style={styles.footerText}>Sudah punya akun?</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.textClick}> Masuk di sini</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
