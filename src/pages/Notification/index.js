@@ -1,13 +1,34 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import Notif from '../../component/notif';
+import {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {ApiGetNotif} from '../../config/Api';
 
 const Notification = () => {
+  const dispatch = useDispatch();
+  const token = useSelector(state => state.global.token);
+  const notif = useSelector(state => state.global.notif);
+  useEffect(() => {
+    dispatch(ApiGetNotif(token));
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Akun Saya</Text>
       <View style={styles.containerNotif}>
-        <Notif
+        {notif.map((data, index) => (
+          <View key={index}>
+            <Notif
+              image={'../../assets/Images/jam1.png'}
+              titleNotif={'Penawaran produk'}
+              textNotif="Jam Tangan Casio Rp 250.000 Ditawar Rp 200.000"
+              dateNotif="20 Apr, 14:04"
+            />
+          </View>
+        ))}
+
+        {/* <Notif
           image={'../../assets/Images/jam1.png'}
           titleNotif={'Penawaran produk'}
           textNotif="Jam Tangan Casio Rp 250.000 Ditawar Rp 200.000"
@@ -18,7 +39,7 @@ const Notification = () => {
           titleNotif="Berhasil diterbitkan"
           textNotif="Jam Tangan Casio Rp 250.000"
           dateNotif="19 Apr, 12:00"
-        />
+        /> */}
       </View>
     </View>
   );
