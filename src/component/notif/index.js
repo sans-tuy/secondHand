@@ -1,9 +1,9 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 
 const Notif = props => {
   return (
-    <View style={styles.wrapperNotif}>
+    <TouchableOpacity style={styles.wrapperNotif} onPress={props.press}>
       <View style={styles.imageNotif}>
         <Image
           style={styles.image}
@@ -20,7 +20,7 @@ const Notif = props => {
         </Text>
         <View style={styles.redNotif}></View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

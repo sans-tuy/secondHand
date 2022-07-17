@@ -13,42 +13,51 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import Notif from '../../component/notif';
 import {setSelectedChip} from '../../config/Redux/reducer';
 import {useEffect} from 'react';
-import {ApiGetWishlist} from '../../config/Api';
+import {ApiGetProduct, ApiGetWishlist} from '../../config/Api';
 import * as navigation from '../../config/Router/rootNavigation';
 
-function Produk() {
+function Produk(props) {
+  const item = props.produk;
   return (
-    <View style={styles.listProduct}>
-      <TouchableOpacity onPress={() => navigation.navigate('DetailProduct')}>
-        <View style={styles.boxAdd}>
-          <Icon size={20} name={'plus'} />
-          <Text>Tambah Produk</Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <View style={styles.boxProduct}>
-          <Image
-            source={{uri: 'https://picsum.photos/200/300'}}
-            style={styles.imageProduct}
-          />
-          <Text style={styles.titleProduct}>Jam Tangan Casio</Text>
-          <Text>Aksesoris</Text>
-          <Text style={styles.price}>Rp 250.000</Text>
-        </View>
-      </TouchableOpacity>
-    </View>
+    <ScrollView>
+      <View style={styles.listProduct}>
+        <TouchableOpacity onPress={() => navigation.navigate('DetailProduct')}>
+          <View style={styles.boxAdd}>
+            <Icon size={20} name={'plus'} />
+            <Text>Tambah Produk</Text>
+          </View>
+        </TouchableOpacity>
+        {item.map((data, index) => {
+          return (
+            <TouchableOpacity
+              key={index}
+              onPress={() => navigation.navigate('PreviewProductSeller')}>
+              <View style={styles.boxProduct}>
+                <Image
+                  source={{uri: `${data.image_url}`}}
+                  style={styles.imageProduct}
+                />
+                <Text style={styles.titleProduct}>{data.name}</Text>
+                <Text>{data.description}</Text>
+                <Text style={styles.price}>Rp {data.base_price}</Text>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    </ScrollView>
   );
 }
 
-function Favorite() {
-  const favorite = useSelector(state => state.global.favorite);
-  // const notif = [
+function Favorite(props) {
+  // const favorite = [
   //   {
-  //     titleNotif: 'Penawaran Produk',
-  //     textNotif: 'Jam Tangan Casio Rp 250.000',
-  //     dateNotif: '19 Apr, 12:00',
+  //     name: 'Penawaran Produk',
+  //     description: 'Jam Tangan Casio Rp 250.000',
+  //     updated_at: '19 Apr, 12:00',
   //   },
   // ];
+  const favorite = props.fav;
   return (
     <View style={{flex: 1}}>
       {favorite.length == 0 ? (
@@ -62,6 +71,7 @@ function Favorite() {
             titleNotif={data.name}
             textNotif={data.description}
             dateNotif={data.updated_at}
+            press={() => navigation.navigate('PreviewProduct')}
           />
         ))
       )}
@@ -72,7 +82,7 @@ function Favorite() {
 function Terjual() {
   return (
     <View>
-      <Text>Terjual</Text>
+      <Text>There is no screen terjual in figma XD</Text>
     </View>
   );
 }
@@ -80,9 +90,12 @@ function Terjual() {
 const SellList = () => {
   const selectedChip = useSelector(state => state.global.selectedChip);
   const token = useSelector(state => state.global.accessToken);
+  const produk = useSelector(state => state.global.product);
+  const favorite = useSelector(state => state.global.favorite);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(ApiGetWishlist(token));
+    dispatch(ApiGetProduct(token));
   }, []);
 
   return (
@@ -123,9 +136,9 @@ const SellList = () => {
         </ScrollView>
       </View>
       {selectedChip == 1 ? (
-        <Produk />
+        <Produk produk={produk} />
       ) : selectedChip == 2 ? (
-        <Favorite />
+        <Favorite fav={favorite} />
       ) : (
         <Terjual />
       )}

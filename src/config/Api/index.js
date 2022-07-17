@@ -35,7 +35,6 @@ const ApiGetWishlist = token => dispatch => {
     })
     .then(val => {
       dispatch(setFavorite(val.data));
-      console.log('wishlist: ', val.data);
     })
     .catch(err => console.log(err));
 };
