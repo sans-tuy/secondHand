@@ -12,6 +12,7 @@ import Login from '../../pages/Login';
 import Register from '../../pages/Register';
 import PreviewProduct from '../../pages/PreviewProduct';
 import PreviewProductSeller from '../../pages/PreviewProductSeller';
+import DetailProduct from '../../pages/DetailProduct';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -108,6 +109,11 @@ const Router = () => {
       <Stack.Screen
         name="PreviewProductSeller"
         component={PreviewProductSeller}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="DetailProduct"
+        component={DetailProduct}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

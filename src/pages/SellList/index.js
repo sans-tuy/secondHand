@@ -60,12 +60,12 @@ function Favorite(props) {
   const favorite = props.fav;
   return (
     <View style={{flex: 1}}>
-      {notif.length == 0 ? (
+      {favorite.length == 0 ? (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <Image source={require('../../assets/Images/diminati.png')} />
         </View>
       ) : (
-        notif.map((data, index) => (
+        favorite.map((data, index) => (
           <Notif
             image={{uri: data.image_url}}
             titleNotif={data.name}
