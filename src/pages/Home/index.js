@@ -12,6 +12,7 @@ import {
 import axios from 'axios';
 import {useDispatch} from 'react-redux';
 import {setAccessToken} from '../../config/Redux/reducer';
+import * as navigation from '../../config/Router/rootNavigation';
 
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -48,36 +49,36 @@ function Home() {
     },
   ];
 
-  const dummy = [
-    {
-      id: '1',
-      image: require('../../assets/Images/jam1.png'),
-      title: 'Jam Tangan Casio',
-      category: 'Aksesoris',
-      price: '290000',
-    },
-    {
-      id: '2',
-      image: require('../../assets/Images/jam2.png'),
-      title: 'Jam Tangan Samsung',
-      category: 'Aksesoris',
-      price: '3000000',
-    },
-    {
-      id: '3',
-      image: require('../../assets/Images/jam1.png'),
-      title: 'Jam Tangan Casio',
-      category: 'Aksesoris',
-      price: '290000',
-    },
-    {
-      id: '4',
-      image: require('../../assets/Images/jam2.png'),
-      title: 'Jam Tangan Samsung',
-      category: 'Aksesoris',
-      price: '3000000',
-    },
-  ];
+  // const dummy = [
+  //   {
+  //     id: '1',
+  //     image: require('../../assets/Images/jam1.png'),
+  //     title: 'Jam Tangan Casio',
+  //     category: 'Aksesoris',
+  //     price: '290000',
+  //   },
+  //   {
+  //     id: '2',
+  //     image: require('../../assets/Images/jam2.png'),
+  //     title: 'Jam Tangan Samsung',
+  //     category: 'Aksesoris',
+  //     price: '3000000',
+  //   },
+  //   {
+  //     id: '3',
+  //     image: require('../../assets/Images/jam1.png'),
+  //     title: 'Jam Tangan Casio',
+  //     category: 'Aksesoris',
+  //     price: '290000',
+  //   },
+  //   {
+  //     id: '4',
+  //     image: require('../../assets/Images/jam2.png'),
+  //     title: 'Jam Tangan Samsung',
+  //     category: 'Aksesoris',
+  //     price: '3000000',
+  //   },
+  // ];
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -102,7 +103,7 @@ function Home() {
   };
 
   const handleOnPressCategoryn = () => {
-    alert('Ini Category');
+    navigation.navigate('PreviewProduct');
   };
 
   return (
@@ -158,7 +159,7 @@ function Home() {
                       onPress={handleOnPressCategoryn}
                       title={item.name}
                       image={item.image_url}
-                      category={item.Categories}
+                      category={item.Categories.map(it => it.name)}
                       price={item.base_price}
                     />
                   </View>

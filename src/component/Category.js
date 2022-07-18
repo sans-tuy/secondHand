@@ -10,9 +10,6 @@ import {
 import React, {useState} from 'react';
 
 const Category = ({onPress, image, title, category, price}) => {
-  const [categori, setCategory] = useState(null);
-  console.log(category);
-
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={onPress} style={styles.cardStyle}>
@@ -28,7 +25,7 @@ const Category = ({onPress, image, title, category, price}) => {
         </View>
         <View style={{marginTop: 8}}>
           <Text style={styles.title}>{title == false ? '' : title}</Text>
-          {/* <Text style={styles.category}>{categori}</Text> */}
+          <Text style={styles.category}>{category[0]}</Text>
         </View>
         <View style={{marginTop: 4}}>
           <Text style={styles.price}>
