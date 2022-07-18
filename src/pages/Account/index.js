@@ -1,12 +1,15 @@
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {Image, Modal, Pressable, StyleSheet, Text, View} from 'react-native';
+import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import * as navigation from '../../config/Router/rootNavigation';
 import {setAccessToken} from '../../config/Redux/reducer';
+import LottieView from 'lottie-react-native';
+import MyButton from '../../component/Button';
 
 const Account = () => {
   const dispatch = useDispatch();
   const token = useSelector(state => state.global.accessToken);
+  const [modalVisible, setmodalVisible] = useState(false);
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Akun Saya</Text>
@@ -32,11 +35,56 @@ const Account = () => {
         />
         <Text style={styles.text}>Pengaturan Akun</Text>
       </View>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setmodalVisible(!modalVisible);
+        }}>
+        <View
+          style={{
+            alignItems: 'center',
+            height: '60%',
+            justifyContent: 'flex-end',
+          }}>
+          <LottieView
+            style={{height: '80%', alignItems: 'center'}}
+            source={require('../../assets/animation/sad-emoji.json')}
+            autoPlay
+            loop
+          />
+          <Text style={{fontWeight: 'bold', fontSize: 24}}>
+            Are you sure want to quit ?
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              width: '100%',
+            }}>
+            <MyButton
+              label={'Yes'}
+              onPress={() => {
+                dispatch(setAccessToken(null));
+                navigation.navigate('Login');
+              }}
+              type={'primary'}
+            />
+            <MyButton
+              label={'No'}
+              onPress={() => {
+                setmodalVisible(!modalVisible);
+              }}
+              type={'primary'}
+            />
+          </View>
+        </View>
+      </Modal>
       <Pressable
         style={styles.wrapperText}
         onPress={() => {
-          dispatch(setAccessToken(null));
-          navigation.navigate('Login');
+          setmodalVisible(!modalVisible);
         }}>
         <Image
           source={require('../../assets/icon/fi_log-out.png')}

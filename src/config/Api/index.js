@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {
   setAccessToken,
+  setDataProduct,
   setFavorite,
   setNotif,
   setProduct,
@@ -49,6 +50,18 @@ const ApiGetNotif = token => dispatch => {
       console.log('Notif: ', val.data);
     })
     .catch(err => console.log(err));
+};
+
+const ApiGetHome = () => dispatch => {
+  axios
+    .get('https://market-final-project.herokuapp.com/buyer/product')
+    .then(val => {
+      const data = val.data;
+      dispatch(setDataProduct(data));
+    })
+    .catch(err => {
+      console.log(err);
+    });
 };
 
 const ApiGetProduct = token => dispatch => {
@@ -101,4 +114,5 @@ export {
   ApiGetNotif,
   ApiGetProduct,
   ApiPostProduct,
+  ApiGetHome,
 };
