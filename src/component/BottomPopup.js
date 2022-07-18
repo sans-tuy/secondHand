@@ -10,7 +10,6 @@ import {
   SafeAreaView,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
-import {Portal} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 const BottomPopup = ({

@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ScrollView,
 } from 'react-native';
 import React, {useState} from 'react';
 import Ionic from 'react-native-vector-icons/Ionicons';
@@ -35,50 +36,45 @@ const Login = () => {
 
   return (
     <View style={styles.container}>
-      <View>
-        <TouchableOpacity>
-          <Image source={arrow} style={styles.icon} />
-        </TouchableOpacity>
-        <Text style={styles.title}>Masuk</Text>
-        <Text style={{color: 'black'}}>Email</Text>
-        <TextInput
-          placeholder="Contoh:johndee@gmail.com"
-          value={email}
-          onChangeText={val => setemail(val)}
-          style={styles.inputText}
-        />
-        <Text style={{color: 'black'}}>Password</Text>
+      <ScrollView style={{flex: 1}}>
         <View>
+          <TouchableOpacity>
+            <Image source={arrow} style={styles.icon} />
+          </TouchableOpacity>
+          <Text style={styles.title}>Masuk</Text>
+          <Text style={{color: 'black'}}>Email</Text>
           <TextInput
-            placeholder="Masukkan password"
+            placeholder="Contoh:johndee@gmail.com"
+            value={email}
+            onChangeText={val => setemail(val)}
             style={styles.inputText}
-            value={password}
-            secureTextEntry={hide}
-            onChangeText={val => setpassword(val)}
           />
-          <Pressable
-            style={styles.eye}
-            onPressIn={() => {
-              seteye('eye-outline');
-              sethide(false);
-            }}
-            onPressOut={() => {
-              seteye('eye-off-outline');
-              sethide(true);
-            }}>
-            <Ionic name={eye} size={25} color={'#7126B5'} />
-          </Pressable>
+          <Text style={{color: 'black'}}>Password</Text>
+          <View>
+            <TextInput
+              placeholder="Masukkan password"
+              style={styles.inputText}
+              value={password}
+              onChangeText={val => setpassword(val)}
+            />
+            <Pressable
+              style={styles.eye}
+              onPressIn={() => seteye('eye-off-outline')}
+              onPressOut={() => seteye('eye-outline')}>
+              <Ionic name={eye} size={25} color={'#7126B5'} />
+            </Pressable>
+          </View>
+          <TouchableOpacity style={styles.button} onPress={() => validate()}>
+            <Text style={styles.buttonText}>Masuk</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.button} onPress={() => validate()}>
-          <Text style={styles.buttonText}>Masuk</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.navigateText}>
-        <Text style={styles.footerText}>Belum punya akun?</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-          <Text style={styles.textClick}> Daftar di sini</Text>
-        </TouchableOpacity>
-      </View>
+        <View style={styles.navigateText}>
+          <Text style={styles.footerText}>Belum punya akun?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+            <Text style={styles.textClick}> Daftar di sini</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </View>
   );
 };

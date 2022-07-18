@@ -5,23 +5,34 @@ import {
   View,
   Image,
   Dimensions,
+  ImageBackground,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 
 const Category = ({onPress, image, title, category, price}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={onPress} style={styles.cardStyle}>
         <View style={styles.containerImage}>
-          <Image source={image} style={styles.image} />
+          <ImageBackground
+            source={{
+              uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqEWgS0uxxEYJ0PsOb2OgwyWvC0Gjp8NUdPw&usqp=CAU',
+            }}
+            resizeMode="cover"
+            style={{flex: 1, justifyContent: 'center'}}>
+            <Image source={{uri: image}} style={styles.image} />
+          </ImageBackground>
         </View>
         <View style={{marginTop: 8}}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.category}>{category}</Text>
+          <Text style={styles.title}>{title == false ? '' : title}</Text>
+          <Text style={styles.category}>{category[0]}</Text>
         </View>
         <View style={{marginTop: 4}}>
           <Text style={styles.price}>
-            Rp{price.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1.')}
+            Rp
+            {price
+              ? price.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1.')
+              : ''}
           </Text>
         </View>
       </TouchableOpacity>
