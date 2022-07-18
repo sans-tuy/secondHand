@@ -7,7 +7,7 @@ import {ApiGetNotif} from '../../config/Api';
 
 const Notification = () => {
   const dispatch = useDispatch();
-  const token = useSelector(state => state.global.token);
+  const token = useSelector(state => state.global.accessToken);
   const notif = useSelector(state => state.global.notif);
   useEffect(() => {
     dispatch(ApiGetNotif(token));
@@ -16,6 +16,7 @@ const Notification = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Akun Saya</Text>
+      {console.log('token', token)}
       <View style={styles.containerNotif}>
         {notif.map((data, index) => (
           <View key={index}>

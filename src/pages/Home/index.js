@@ -9,9 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 
-import axios from 'axios';
-import {useDispatch} from 'react-redux';
-import {setAccessToken} from '../../config/Redux/reducer';
+import {useDispatch, useSelector} from 'react-redux';
 import * as navigation from '../../config/Router/rootNavigation';
 
 import LinearGradient from 'react-native-linear-gradient';
@@ -20,11 +18,12 @@ import Banner from '../../component/Banner';
 import Category from '../../component/Category';
 import SearchBar from '../../component/SearchBar';
 import MiniButton from '../../component/MiniButton';
+import {ApiGetHome} from '../../config/Api';
 
 const icon = require('../../assets/icon/png_gift_88837.png');
 
 function Home() {
-  const [dataProduct, setDataProduct] = useState([]);
+  const dataProduct = useSelector(state => state.global.dataProduct);
 
   const DATA = [
     {
@@ -82,18 +81,8 @@ function Home() {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    axios
-      .get('https://market-final-project.herokuapp.com/buyer/product')
-      .then(val => {
-        const data = val.data;
-        dispatch(setAccessToken(val.data.access_token));
-        setDataProduct(data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    dispatch(ApiGetHome());
   }, []);
-  // console.log(dataProduct);
 
   const [value, setValue] = useState('');
   const [click, setClick] = useState(false);
@@ -142,6 +131,7 @@ function Home() {
                 keyExtractor={item => item.id}
                 horizontal
                 data={DATA}
+                onEndReachedThreshold={4}
                 renderItem={({item}) => (
                   <MiniButton
                     textButton={item.title}

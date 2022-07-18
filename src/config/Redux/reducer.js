@@ -6,6 +6,7 @@ const initialState = {
   favorite: [],
   notif: [],
   product: [],
+  dataProduct: [],
 };
 
 export const globalSlice = createSlice({
@@ -27,6 +28,9 @@ export const globalSlice = createSlice({
     setProduct: (state, action) => {
       state.product = action.payload;
     },
+    setDataProduct: (state, action) => {
+      state.dataProduct = action.payload;
+    },
   },
 });
 
@@ -37,6 +41,7 @@ export const {
   setFavorite,
   setNotif,
   setProduct,
+  setDataProduct,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;
