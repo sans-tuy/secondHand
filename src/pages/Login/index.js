@@ -11,15 +11,15 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import Ionic from 'react-native-vector-icons/Ionicons';
-import axios from 'axios';
 import * as navigation from '../../config/Router/rootNavigation';
 import {useDispatch} from 'react-redux';
-import {setAccessToken} from '../../config/Redux/reducer';
+import {ApiLogin} from '../../config/Api';
 const arrow = require('../../assets/icon/fi_arrow-left.png');
 
 const Login = () => {
-  const [eye, seteye] = useState('eye-outline');
+  const [eye, seteye] = useState('eye-off-outline');
   const [email, setemail] = useState('');
+  const [hide, sethide] = useState(true);
   const [password, setpassword] = useState('');
   const dispatch = useDispatch();
   const data = {
@@ -31,14 +31,7 @@ const Login = () => {
       Alert.alert('All fields are required');
       return false;
     }
-    axios
-      .post('https://market-final-project.herokuapp.com/auth/login', data)
-      .then(val => {
-        console.log(val.data);
-        dispatch(setAccessToken(val.data.access_token));
-        navigation.navigate('MainApp');
-      })
-      .catch(err => console.log(err));
+    dispatch(ApiLogin(data));
   };
 
   return (
