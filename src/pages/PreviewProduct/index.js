@@ -55,14 +55,17 @@ const ModalPopup = ({visible, children}) => {
   );
 };
 
-const PreviewProduct = () => {
+const PreviewProduct = ({route, navigation}) => {
   const [show, setShow] = useState(false);
   const [visible, setVisible] = useState(false);
   const [bid, setBid] = useState(false);
 
+  const {data} = route.params;
+  console.log(data);
+
   return (
-    <View>
-      <ScrollView>
+    <View style={{flex: 1, marginBottom: 30, height: '100%'}}>
+      <ScrollView style={{flex: 1}}>
         <Carousel images={dummy} />
         {/* modal 
         popup section */}
@@ -108,110 +111,116 @@ const PreviewProduct = () => {
         <View style={styles.fullDesc}>
           <View>
             <Text style={styles.fullTextDesc}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
-              Duis aute irure dolor in reprehenderit in voluptate velit esse
-              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-              cupidatat non proident, sunt in culpa qui officia deserunt mollit
-              anim id est laborum. Duis aute irure dolor in reprehenderit in
-              voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-              officia deserunt mollit anim id est laborum.
+              My issue? Every post that I've read on stack and medium always
+              only looks into the Searchbar Search filter example. Which is
+              basically only accepting 1 filter string and then filtering the
+              list. But what if I have multiple parameters to filter like in the
+              example I'm trying to achieve? what if you have 3 parameters, and
+              each parameter can have multiple values (4 or more) to be
+              considered in filtering. How to apply such a complex level of
+              filtering, and then return the filtered items to my Flatlist? My
+              issue? Every post that I've read on stack and medium always only
+              looks into the Searchbar Search filter example. Which is basically
+              only accepting 1 filter string and then filtering the list. But
+              what if I have multiple parameters to filter like in the example
+              I'm trying to achieve? what if you have 3 parameters, and each
+              parameter can have multiple values (4 or more) to be considered in
+              filtering. How to apply such a complex level of filtering, and
+              then return the filtered items to my Flatlist?
             </Text>
           </View>
         </View>
-      </ScrollView>
-      <View style={styles.buttonWrapper}>
-        <Button
-          disabled={bid ? true : false}
-          onPress={() => setShow(true)}
-          rounded={'large'}
-          type={bid ? 'secondary' : 'primary'}
-          size={'large'}
-          label={'Saya Tertarik dan ingin nego'}
-        />
-      </View>
-      {/* content
+        <View style={styles.buttonWrapper}>
+          <Button
+            disabled={bid ? true : false}
+            onPress={() => setShow(true)}
+            rounded={'large'}
+            type={bid ? 'secondary' : 'primary'}
+            size={'large'}
+            label={'Saya Tertarik dan ingin nego'}
+          />
+        </View>
+        {/* content
        section  */}
-      {/* modal
+        {/* modal
        bottom popup 
        section */}
-      <BottomPopup
-        ennableBackdropDismiss
-        onDismiss={() => {
-          setShow(false);
-        }}
-        show={show}>
-        <ScrollView>
-          <View
-            style={{padding: 32, justifyContent: 'center', marginBottom: 100}}>
-            <Text
+        <BottomPopup
+          ennableBackdropDismiss
+          onDismiss={() => {
+            setShow(false);
+          }}
+          show={show}>
+          <ScrollView>
+            <View
               style={{
-                marginBottom: 16,
-                color: Colors.text,
-                fontSize: 14,
-                fontWeight: '500',
-                fontStyle: 'normal',
+                padding: 32,
+                justifyContent: 'center',
+                marginBottom: 100,
               }}>
-              Masukan Harga Tawaran mu
-            </Text>
+              <Text
+                style={{
+                  marginBottom: 16,
+                  color: Colors.text,
+                  fontSize: 14,
+                  fontWeight: '500',
+                  fontStyle: 'normal',
+                }}>
+                Masukan Harga Tawaran mu
+              </Text>
 
-            <Text
-              style={{
-                color: Colors.textSecond,
-                fontSize: 14,
-                fontWeight: '500',
-                fontStyle: 'normal',
-              }}>
-              Harga tawaranmu akan diketahui penual, jika penjual cocok kamu
-              akan segera dihubungi penjual.
-            </Text>
+              <Text
+                style={{
+                  color: Colors.textSecond,
+                  fontSize: 14,
+                  fontWeight: '500',
+                  fontStyle: 'normal',
+                }}>
+                Harga tawaranmu akan diketahui penual, jika penjual cocok kamu
+                akan segera dihubungi penjual.
+              </Text>
 
-            <View style={styles.cardProd}>
-              <View style={{marginRight: 16}}>
-                <Image
-                  source={require('../../assets/Images/profilePrev.png')}
-                />
+              <View style={styles.cardProd}>
+                <View style={{marginRight: 16}}>
+                  <Image
+                    source={require('../../assets/Images/profilePrev.png')}
+                  />
+                </View>
+                <View>
+                  <Text style={styles.nama}>Jam Tangan Casio</Text>
+                  <Text style={styles.price}>
+                    {' '}
+                    Rp
+                    {(250000)
+                      .toString()
+                      .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1.')}
+                  </Text>
+                </View>
               </View>
-              <View>
-                <Text style={styles.nama}>Jam Tangan Casio</Text>
-                <Text style={styles.price}>
-                  {' '}
-                  Rp
-                  {(250000)
-                    .toString()
-                    .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1.')}
-                </Text>
+
+              <View style={{paddingTop: 16}}>
+                <Text style={styles.price}>Harga Tawar</Text>
+                <View>
+                  <TextInput placeholder="Rp.0,00" style={styles.inputText} />
+                </View>
               </View>
+
+              <Button
+                onPress={() => {
+                  setVisible(true);
+                  setShow(false);
+                  setBid(true);
+                }}
+                rounded={'large'}
+                type={'primary'}
+                label={'Kirim'}
+              />
             </View>
-
-            <View style={{paddingTop: 16}}>
-              <Text style={styles.price}>Harga Tawar</Text>
-              <View>
-                <TextInput placeholder="Rp.0,00" style={styles.inputText} />
-              </View>
-            </View>
-
-            <Button
-              onPress={() => {
-                setVisible(true);
-                setShow(false);
-                setBid(true);
-              }}
-              rounded={'large'}
-              type={'primary'}
-              label={'Kirim'}
-            />
-          </View>
-        </ScrollView>
-      </BottomPopup>
-      {/* modal
+          </ScrollView>
+        </BottomPopup>
+        {/* modal
        bottom popup section */}
+      </ScrollView>
     </View>
   );
 };
@@ -321,8 +330,8 @@ const styles = StyleSheet.create({
     color: Colors.textSecond,
   },
   buttonWrapper: {
-    position: 'relative',
-    top: -height * 0.15,
+    position: 'absolute',
+    // top: -height * 0.15,
     left: 0,
     right: 0,
     alignItems: 'center',

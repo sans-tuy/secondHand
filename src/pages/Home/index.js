@@ -7,10 +7,11 @@ import {
   Image,
   FlatList,
   ScrollView,
+  LogBox,
 } from 'react-native';
 
 import {useDispatch, useSelector} from 'react-redux';
-import * as navigation from '../../config/Router/rootNavigation';
+// import * as navigation from '../../config/Router/rootNavigation';
 
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -19,114 +20,202 @@ import Category from '../../component/Category';
 import SearchBar from '../../component/SearchBar';
 import MiniButton from '../../component/MiniButton';
 import {ApiGetHome} from '../../config/Api';
+import {setDataProduct, setProduct} from '../../config/Redux/reducer';
 
 const icon = require('../../assets/icon/png_gift_88837.png');
 
-function Home() {
+function Home({navigation}) {
   const dataProduct = useSelector(state => state.global.dataProduct);
 
   const DATA = [
     {
-      id: 'id1',
       title: 'Semua',
     },
     {
-      id: 'id2',
-      title: 'Hobby',
+      title: 'Elektronik',
     },
     {
-      id: 'id3',
-      title: 'Kendaraan',
+      title: 'Komputer dan Aksesoris',
     },
     {
-      id: 'id4',
-      title: 'Baju',
+      title: 'Fotografi',
     },
     {
-      id: 'id5',
-      title: 'Sapi',
+      title: 'Makanan dan Minuman',
     },
   ];
 
-  // const dummy = [
-  //   {
-  //     id: '1',
-  //     image: require('../../assets/Images/jam1.png'),
-  //     title: 'Jam Tangan Casio',
-  //     category: 'Aksesoris',
-  //     price: '290000',
-  //   },
-  //   {
-  //     id: '2',
-  //     image: require('../../assets/Images/jam2.png'),
-  //     title: 'Jam Tangan Samsung',
-  //     category: 'Aksesoris',
-  //     price: '3000000',
-  //   },
-  //   {
-  //     id: '3',
-  //     image: require('../../assets/Images/jam1.png'),
-  //     title: 'Jam Tangan Casio',
-  //     category: 'Aksesoris',
-  //     price: '290000',
-  //   },
-  //   {
-  //     id: '4',
-  //     image: require('../../assets/Images/jam2.png'),
-  //     title: 'Jam Tangan Samsung',
-  //     category: 'Aksesoris',
-  //     price: '3000000',
-  //   },
-  // ];
-
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(ApiGetHome());
   }, []);
 
   const [value, setValue] = useState('');
-  const [click, setClick] = useState(false);
+  const [search, setSearch] = useState('Semua');
+  const [dataList, setDataList] = useState(dataProduct);
 
-  const handleOnPressButtonSearch = () => {
-    alert('Ini Button');
+  const setSearchFilter = search => {
+    if (search !== 'Semua') {
+      setDataList([
+        ...dataProduct.filter(
+          item => item.Categories.map(it => it.name)[0] === search,
+        ),
+      ]);
+    } else {
+      setDataList(dataProduct);
+    }
+    setSearch(search);
   };
 
-  const handleOnPressCategoryn = () => {
-    navigation.navigate('PreviewProduct');
-  };
-
+  console.log(dataList);
+  // console.log(dataProduct);
   return (
-    <View style={styles.container}>
-      <LinearGradient
-        colors={['#FFE9C9', '#ffffff']}
-        start={{x: 1, y: 0}}
-        end={{x: 1, y: 1}}>
-        <ScrollView>
-          <SearchBar
-            placeholder="Cari di Second Chance"
-            value={value}
-            onChangeText={text => setValue(text)}
-            onPressSearch={() => {
-              console.log(value);
-              setValue('');
-            }}
-            onPressDelete={() => {
-              console.log('Hello Delete Button Search');
-              setValue('');
-            }}
-          />
-          <Banner
-            source={icon}
-            title="Bulan Ramadhan Banyak Diskon!"
-            subtitle="Diskon Hingga"
-            discount="60%"
-          />
-          <View style={styles.containerCategory}>
-            <View>
-              <Text style={styles.textCategory}>Telusuri Kategori</Text>
-            </View>
-            <View style={styles.containerButton}>
-              <FlatList
+    <LinearGradient
+      colors={['#FFE9C9', '#ffffff']}
+      start={{x: 1, y: 0}}
+      end={{x: 1, y: 1}}>
+      <View style={styles.containerCategory}>
+        <FlatList
+          numColumns={2}
+          keyExtractor={item => item.id}
+          data={dataList}
+          onEndReachedThreshold={4}
+          ListHeaderComponent={
+            <>
+              <SearchBar
+                placeholder="Cari di Second Chance"
+                value={value}
+                onChangeText={text => setValue(text)}
+                onPressSearch={() => {
+                  console.log(value);
+                  setValue('');
+                }}
+                onPressDelete={() => {
+                  console.log('Hello Delete Button Search');
+                  setValue('');
+                }}
+              />
+              <View style={{marginHorizontal: 15, marginTop: 15}}>
+                <Banner
+                  source={icon}
+                  title="Bulan Ramadhan Banyak Diskon!"
+                  subtitle="Diskon Hingga"
+                  discount="60%"
+                />
+              </View>
+
+              <View style={{marginHorizontal: 15, marginTop: 15}}>
+                <Text style={styles.textCategory}>Telusuri Kategori</Text>
+              </View>
+
+              <View style={styles.containerButton}>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  {DATA.map((item, index) => (
+                    <MiniButton
+                      e={item.title}
+                      key={index}
+                      iconClr={search === item.title ? '#fff' : '#3C3C3C'}
+                      textButton={item.title}
+                      textStyle={[
+                        styles.textButtonInActive,
+                        search === item.title && styles.textButtonActive,
+                      ]}
+                      style={[
+                        styles.buttonContainerInactive,
+                        search === item.title && styles.buttonContainer,
+                      ]}
+                      onPressSearch={() => setSearchFilter(item.title)}
+                    />
+                  ))}
+                </ScrollView>
+              </View>
+            </>
+          }
+          renderItem={({item, index}) => (
+            <Category
+              key={index}
+              onPress={() => {
+                navigation.navigate('PreviewProduct', {
+                  data: item,
+                });
+              }}
+              title={item.name}
+              image={item.image_url}
+              category={item.Categories.map(it => it.name)}
+              price={item.base_price}
+            />
+          )}
+        />
+      </View>
+    </LinearGradient>
+  );
+}
+
+export default Home;
+
+const styles = StyleSheet.create({
+  container: {},
+  containerCategory: {
+    marginTop: 20,
+  },
+  containerButton: {
+    flexDirection: 'row',
+    marginHorizontal: 15,
+  },
+  button: {
+    // backgroundColor: '#7126B5',
+    padding: 15,
+  },
+  buttonContainer: {
+    paddingHorizontal: 18,
+    paddingVertical: 5,
+    flexDirection: 'row',
+    height: 44,
+    backgroundColor: '#7126B5',
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonContainerInactive: {
+    paddingHorizontal: 18,
+    paddingVertical: 5,
+    flexDirection: 'row',
+    height: 44,
+    backgroundColor: '#E2D4F0',
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textButtonActive: {
+    color: '#FFFFFF',
+    fontWeight: '500',
+    fontSize: 14,
+    fontStyle: 'normal',
+  },
+  textButtonInActive: {
+    color: '#3C3C3C',
+    fontWeight: '500',
+    fontSize: 14,
+    fontStyle: 'normal',
+  },
+  textCategory: {
+    color: '#151515',
+    fontSize: 14,
+    fontWeight: '500',
+    fontStyle: 'normal',
+  },
+  linearGradient: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5,
+    height: 200,
+    width: 350,
+  },
+});
+
+{
+  /* <FlatList
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={item => item.id}
                 horizontal
@@ -139,60 +228,24 @@ function Home() {
                     onPressSearch={handleOnPressButtonSearch}
                   />
                 )}
-              />
-            </View>
-            <View style={styles.containerCard}>
-              {dataProduct &&
+              /> */
+}
+
+{
+  /* {dataProduct &&
                 dataProduct.map((item, index) => (
                   <View key={index} style={{width: '50%'}}>
                     <Category
-                      onPress={handleOnPressCategoryn}
+                      onPress={() => {
+                        navigation.navigate('PreviewProduct', {
+                          itemId: item.id,
+                        });
+                      }}
                       title={item.name}
                       image={item.image_url}
                       category={item.Categories.map(it => it.name)}
                       price={item.base_price}
                     />
                   </View>
-                ))}
-            </View>
-          </View>
-        </ScrollView>
-      </LinearGradient>
-    </View>
-  );
+                ))} */
 }
-
-export default Home;
-
-const styles = StyleSheet.create({
-  container: {},
-  containerCategory: {
-    marginHorizontal: 20,
-    marginTop: 40,
-  },
-  containerButton: {
-    flexDirection: 'row',
-  },
-  button: {
-    padding: 15,
-  },
-  textCategory: {
-    color: '#151515',
-    fontSize: 14,
-    fontWeight: '500',
-    fontStyle: 'normal',
-  },
-  containerCard: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'flex-start',
-  },
-  linearGradient: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 5,
-    height: 200,
-    width: 350,
-  },
-});
