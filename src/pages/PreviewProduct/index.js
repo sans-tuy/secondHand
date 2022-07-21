@@ -8,6 +8,7 @@ import {
   TextInput,
   Modal,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Colors} from '../../utils/colors';
@@ -59,14 +60,44 @@ const PreviewProduct = ({route, navigation}) => {
   const [show, setShow] = useState(false);
   const [visible, setVisible] = useState(false);
   const [bid, setBid] = useState(false);
+  const [sendBid, setSendBid] = useState(false);
+  const [bidPrice, setBidPrice] = useState('');
 
   const {data} = route.params;
-  console.log(data);
+  // console.log(data);
+  const dataBid = {
+    product_id: data.id,
+    bid_price: bidPrice,
+  };
+
+  const handleBidPrice = () => {
+    if (bidPrice === '') {
+      Alert.alert('All fields are required');
+      return false;
+    }
+    setBid(true);
+    console.log(dataBid);
+  };
+
+  useEffect(() => {
+    if (bidPrice === '') {
+      setSendBid(true);
+    }
+    if (data.status !== 'available') {
+      setBid(true);
+    }
+  });
 
   return (
-    <View style={{flex: 1, marginBottom: 30, height: '100%'}}>
-      <ScrollView style={{flex: 1}}>
-        <Carousel images={dummy} />
+    <View style={{flex: 1, backgroundColor: '#fff'}}>
+      <ScrollView>
+        {/* <Carousel images={dummy} /> */}
+        <Image
+          resizeMode="stretch"
+          style={styles.wrap}
+          key={data.id}
+          source={{uri: data.image_url}}
+        />
         {/* modal 
         popup section */}
         <View>
@@ -92,135 +123,133 @@ const PreviewProduct = ({route, navigation}) => {
         {/* content
          section */}
         <View style={styles.cardDesc}>
-          <Text style={styles.textTitle}>Jam Tangan Casio</Text>
-          <Text style={styles.type}>Aksesoris</Text>
+          <Text style={styles.textTitle}>{data.name}</Text>
+          <Text style={styles.type}>
+            {data.Categories.map(it => it.name)[0]}
+          </Text>
           <Text style={styles.price}>
             {' '}
-            Rp{(250000).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1.')}
+            Rp
+            {data.base_price
+              .toString()
+              .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1.')}
           </Text>
         </View>
         <View style={styles.cardProf}>
           <View style={{marginRight: 16}}>
-            <Image source={require('../../assets/Images/profilePrev.png')} />
+            <Image
+              style={{width: 35, height: 35}}
+              source={{uri: data.image_url}}
+            />
           </View>
           <View>
-            <Text style={styles.nama}>Nama Penjual</Text>
-            <Text style={styles.kota}>Kota</Text>
+            <Text style={styles.nama}>{data.status}</Text>
+            <Text style={styles.kota}>{data.location}</Text>
           </View>
         </View>
         <View style={styles.fullDesc}>
           <View>
-            <Text style={styles.fullTextDesc}>
-              My issue? Every post that I've read on stack and medium always
-              only looks into the Searchbar Search filter example. Which is
-              basically only accepting 1 filter string and then filtering the
-              list. But what if I have multiple parameters to filter like in the
-              example I'm trying to achieve? what if you have 3 parameters, and
-              each parameter can have multiple values (4 or more) to be
-              considered in filtering. How to apply such a complex level of
-              filtering, and then return the filtered items to my Flatlist? My
-              issue? Every post that I've read on stack and medium always only
-              looks into the Searchbar Search filter example. Which is basically
-              only accepting 1 filter string and then filtering the list. But
-              what if I have multiple parameters to filter like in the example
-              I'm trying to achieve? what if you have 3 parameters, and each
-              parameter can have multiple values (4 or more) to be considered in
-              filtering. How to apply such a complex level of filtering, and
-              then return the filtered items to my Flatlist?
-            </Text>
+            <Text style={styles.fullTextDesc}>{data.description}</Text>
           </View>
         </View>
-        <View style={styles.buttonWrapper}>
-          <Button
-            disabled={bid ? true : false}
-            onPress={() => setShow(true)}
-            rounded={'large'}
-            type={bid ? 'secondary' : 'primary'}
-            size={'large'}
-            label={'Saya Tertarik dan ingin nego'}
-          />
-        </View>
-        {/* content
+      </ScrollView>
+      <View style={styles.buttonWrapper}>
+        <Button
+          disabled={bid ? true : false}
+          onPress={() => {
+            setShow(true);
+            setSendBid(false);
+          }}
+          rounded={'large'}
+          type={bid ? 'secondary' : 'primary'}
+          size={'large'}
+          label={'Saya Tertarik dan ingin nego'}
+        />
+      </View>
+      {/* content
        section  */}
-        {/* modal
+      {/* modal
        bottom popup 
        section */}
-        <BottomPopup
-          ennableBackdropDismiss
-          onDismiss={() => {
-            setShow(false);
-          }}
-          show={show}>
-          <ScrollView>
-            <View
+      <BottomPopup
+        ennableBackdropDismiss
+        onDismiss={() => {
+          setShow(false);
+        }}
+        show={show}>
+        <ScrollView>
+          <View
+            style={{padding: 32, justifyContent: 'center', marginBottom: 100}}>
+            <Text
               style={{
-                padding: 32,
-                justifyContent: 'center',
-                marginBottom: 100,
+                marginBottom: 16,
+                color: Colors.text,
+                fontSize: 14,
+                fontWeight: '500',
+                fontStyle: 'normal',
               }}>
-              <Text
-                style={{
-                  marginBottom: 16,
-                  color: Colors.text,
-                  fontSize: 14,
-                  fontWeight: '500',
-                  fontStyle: 'normal',
-                }}>
-                Masukan Harga Tawaran mu
-              </Text>
+              Masukan Harga Tawaran mu
+            </Text>
 
-              <Text
-                style={{
-                  color: Colors.textSecond,
-                  fontSize: 14,
-                  fontWeight: '500',
-                  fontStyle: 'normal',
-                }}>
-                Harga tawaranmu akan diketahui penual, jika penjual cocok kamu
-                akan segera dihubungi penjual.
-              </Text>
+            <Text
+              style={{
+                color: Colors.textSecond,
+                fontSize: 14,
+                fontWeight: '500',
+                fontStyle: 'normal',
+              }}>
+              Harga tawaranmu akan diketahui penual, jika penjual cocok kamu
+              akan segera dihubungi penjual.
+            </Text>
 
-              <View style={styles.cardProd}>
-                <View style={{marginRight: 16}}>
-                  <Image
-                    source={require('../../assets/Images/profilePrev.png')}
-                  />
-                </View>
-                <View>
-                  <Text style={styles.nama}>Jam Tangan Casio</Text>
-                  <Text style={styles.price}>
-                    {' '}
-                    Rp
-                    {(250000)
-                      .toString()
-                      .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1.')}
-                  </Text>
-                </View>
+            <View style={styles.cardProd}>
+              <View style={{marginRight: 16}}>
+                <Image
+                  style={{width: 35, height: 35}}
+                  source={{uri: data.image_url}}
+                />
               </View>
-
-              <View style={{paddingTop: 16}}>
-                <Text style={styles.price}>Harga Tawar</Text>
-                <View>
-                  <TextInput placeholder="Rp.0,00" style={styles.inputText} />
-                </View>
+              <View>
+                <Text style={styles.nama}>{data.name}</Text>
+                <Text style={styles.price}>
+                  {' '}
+                  Rp
+                  {data.base_price
+                    .toString()
+                    .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1.')}
+                </Text>
               </View>
-
-              <Button
-                onPress={() => {
-                  setVisible(true);
-                  setShow(false);
-                  setBid(true);
-                }}
-                rounded={'large'}
-                type={'primary'}
-                label={'Kirim'}
-              />
             </View>
-          </ScrollView>
-        </BottomPopup>
-        {/* modal
+
+            <View style={{paddingTop: 16}}>
+              <Text style={styles.price}>Harga Tawar</Text>
+              <View>
+                <TextInput
+                  keyboardType="numeric"
+                  onChangeText={val => setBidPrice(val)}
+                  value={bidPrice}
+                  placeholder="Rp.0,00"
+                  style={styles.inputText}
+                />
+              </View>
+            </View>
+
+            <Button
+              disabled={sendBid ? true : false}
+              onPress={() => {
+                handleBidPrice();
+                setVisible(true);
+                setShow(false);
+              }}
+              rounded={'large'}
+              type={sendBid ? 'secondary' : 'primary'}
+              label={'Kirim'}
+            />
+          </View>
+        </ScrollView>
+      </BottomPopup>
+      {/* modal
        bottom popup section */}
-      </ScrollView>
     </View>
   );
 };
@@ -228,8 +257,13 @@ const PreviewProduct = ({route, navigation}) => {
 export default PreviewProduct;
 
 const height = Dimensions.get('window').height;
+const width = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
+  wrap: {
+    width: width,
+    height: height * 0.4,
+  },
   modalBackground: {
     flex: 1,
 
@@ -310,6 +344,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
   },
   fullDesc: {
+    marginBottom: 80,
     marginHorizontal: 20,
     backgroundColor: '#ffffff',
     padding: 16,
@@ -330,10 +365,11 @@ const styles = StyleSheet.create({
     color: Colors.textSecond,
   },
   buttonWrapper: {
+    zIndex: 10,
+    right: 10,
+    left: 10,
     position: 'absolute',
-    // top: -height * 0.15,
-    left: 0,
-    right: 0,
+    bottom: 10,
     alignItems: 'center',
   },
   cardProd: {

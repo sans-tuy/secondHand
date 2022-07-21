@@ -68,7 +68,6 @@ function Home({navigation}) {
     setSearch(search);
   };
 
-  console.log(dataList);
   // console.log(dataProduct);
   return (
     <LinearGradient
