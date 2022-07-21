@@ -1,7 +1,7 @@
-import {StyleSheet, Text} from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionic from 'react-native-vector-icons/Ionicons';
 import Home from '../../pages/Home/index';
 import Notification from '../../pages/Notification';
@@ -13,6 +13,7 @@ import Register from '../../pages/Register';
 import PreviewProduct from '../../pages/PreviewProduct';
 import PreviewProductSeller from '../../pages/PreviewProductSeller';
 import DetailProduct from '../../pages/DetailProduct';
+import EditAccount from '../../pages/EditAccount';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -20,8 +21,8 @@ const Tab = createBottomTabNavigator();
 const MainApp = () => {
   return (
     <Tab.Navigator
-      screenOptions={({route}) => ({
-        tabBarIcon: ({focused}) => {
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused }) => {
           let iconName;
           let size = 25;
           let color = focused ? '#7126B5' : 'gray';
@@ -43,7 +44,7 @@ const MainApp = () => {
             return <Ionic name={iconName} size={size} color={color} />;
           }
         },
-        tabBarLabel: ({focused}) => {
+        tabBarLabel: ({ focused }) => {
           let titleStyle = {
             fontSize: 12,
             fontWeight: focused ? 'bold' : '500',
@@ -62,22 +63,22 @@ const MainApp = () => {
           }
         },
       })}>
-      <Tab.Screen name="Home" component={Home} options={{headerShown: false}} />
+      <Tab.Screen name="Home" component={Home} options={{ headerShown: false }} />
       <Tab.Screen
         name="Notifikasi"
         component={Notification}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
-      <Tab.Screen name="Jual" component={Sell} options={{headerShown: false}} />
+      <Tab.Screen name="Jual" component={Sell} options={{ headerShown: false }} />
       <Tab.Screen
         name="Daftar Jual"
         component={SellList}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Tab.Screen
         name="Akun"
         component={Account}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
     </Tab.Navigator>
   );
@@ -85,40 +86,47 @@ const MainApp = () => {
 
 const Router = () => {
   return (
-    <Stack.Navigator initialRouteName="Login">
+    <Stack.Navigator initialRouteName="MainApp">
       <Stack.Screen
         name="MainApp"
         component={MainApp}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Login"
         component={Login}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Register"
         component={Register}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="PreviewProduct"
         component={PreviewProduct}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="PreviewProductSeller"
         component={PreviewProductSeller}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="DetailProduct"
         component={DetailProduct}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="EditAccount"
+        component={EditAccount}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
 };
+
 
 export default Router;
 

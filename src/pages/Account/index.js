@@ -1,8 +1,8 @@
-import {Image, Modal, Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import { Image, Modal, Pressable, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import * as navigation from '../../config/Router/rootNavigation';
-import {setAccessToken} from '../../config/Redux/reducer';
+import { setAccessToken } from '../../config/Redux/reducer';
 import LottieView from 'lottie-react-native';
 import MyButton from '../../component/Button';
 
@@ -13,7 +13,7 @@ const Account = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Akun Saya</Text>
-      <View style={{alignItems: 'center', marginBottom: 30}}>
+      <View style={{ alignItems: 'center', marginBottom: 30 }}>
         <View style={styles.wrapperIcon}>
           <Image
             style={styles.icon}
@@ -26,7 +26,9 @@ const Account = () => {
           source={require('../../assets/icon/fi_edit-3.png')}
           style={styles.icon}
         />
-        <Text style={styles.text}>Ubah Akun</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('EditAccount')}>
+          <Text style={styles.text}>Ubah akun</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.wrapperText}>
         <Image
@@ -49,12 +51,12 @@ const Account = () => {
             justifyContent: 'flex-end',
           }}>
           <LottieView
-            style={{height: '80%', alignItems: 'center'}}
+            style={{ height: '80%', alignItems: 'center' }}
             source={require('../../assets/animation/sad-emoji.json')}
             autoPlay
             loop
           />
-          <Text style={{fontWeight: 'bold', fontSize: 24}}>
+          <Text style={{ fontWeight: 'bold', fontSize: 24 }}>
             Are you sure want to quit ?
           </Text>
           <View
@@ -92,7 +94,7 @@ const Account = () => {
         />
         <Text style={styles.text}>Keluar</Text>
       </Pressable>
-      <View style={{alignItems: 'center'}}>
+      <View style={{ alignItems: 'center' }}>
         <Text>Version 1.0.0</Text>
       </View>
     </View>
