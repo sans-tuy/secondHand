@@ -24,7 +24,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     flexGrow: 1,
-    marginHorizontal: 30,
   },
   titleBanner: {
     color: '#151515',

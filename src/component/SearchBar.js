@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
   fieldContainer: {
     width: '90%',
     paddingVertical: 5,
-    marginVertical: 20,
   },
   inputContainer: {
     height: 50,

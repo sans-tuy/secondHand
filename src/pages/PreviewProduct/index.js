@@ -8,14 +8,19 @@ import {
   TextInput,
   Modal,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Colors} from '../../utils/colors';
+const arrow = require('../../assets/icon/fi_arrow-left.png');
 
 import Carousel from '../../component/Carousel';
 import Button from '../../component/Button';
 import BottomPopup from '../../component/BottomPopup';
 import Icon from 'react-native-vector-icons/AntDesign';
+import Icon2 from 'react-native-vector-icons/Feather';
+import {ApiOrder} from '../../config/Api';
+import {useDispatch, useSelector} from 'react-redux';
 
 const dummy = [
   {
@@ -55,15 +60,64 @@ const ModalPopup = ({visible, children}) => {
   );
 };
 
-const PreviewProduct = () => {
+const PreviewProduct = ({route, navigation}) => {
+  const {data} = route.params;
+  const token = useSelector(state => state.global.accessToken);
+
   const [show, setShow] = useState(false);
   const [visible, setVisible] = useState(false);
   const [bid, setBid] = useState(false);
+  const [sendBid, setSendBid] = useState(false);
+  const [bidPrice, setBidPrice] = useState('');
+
+  const dispatch = useDispatch();
+
+  // console.log(data);
+  const dataBid = {
+    product_id: data.id,
+    bid_price: bidPrice,
+  };
+
+  const handleBidPrice = () => {
+    if (bidPrice === '') {
+      Alert.alert('All fields are required');
+      return false;
+    }
+    dispatch(ApiOrder(token, dataBid));
+    setBid(true);
+  };
+
+  useEffect(() => {
+    if (bidPrice === '') {
+      setSendBid(true);
+    }
+    if (data.status !== 'available') {
+      setBid(true);
+    }
+  });
 
   return (
-    <View>
+    <View style={{flex: 1, backgroundColor: '#fff'}}>
       <ScrollView>
-        <Carousel images={dummy} />
+        {/* <Carousel images={dummy} /> */}
+
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={{
+            position: 'absolute',
+            top: height * 0.05,
+            zIndex: 100,
+            marginLeft: 10,
+          }}>
+          <Icon2 name="arrow-left" size={30} color="#fff" />
+        </TouchableOpacity>
+
+        <Image
+          resizeMode="stretch"
+          style={styles.wrap}
+          key={data.id}
+          source={{uri: data.image_url}}
+        />
         {/* modal 
         popup section */}
         <View>
@@ -89,40 +143,33 @@ const PreviewProduct = () => {
         {/* content
          section */}
         <View style={styles.cardDesc}>
-          <Text style={styles.textTitle}>Jam Tangan Casio</Text>
-          <Text style={styles.type}>Aksesoris</Text>
+          <Text style={styles.textTitle}>{data.name}</Text>
+          <Text style={styles.type}>
+            {data.Categories.map(it => it.name)[0]}
+          </Text>
           <Text style={styles.price}>
             {' '}
-            Rp{(250000).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1.')}
+            Rp
+            {data.base_price
+              .toString()
+              .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1.')}
           </Text>
         </View>
         <View style={styles.cardProf}>
           <View style={{marginRight: 16}}>
-            <Image source={require('../../assets/Images/profilePrev.png')} />
+            <Image
+              style={{width: 35, height: 35}}
+              source={{uri: data.image_url}}
+            />
           </View>
           <View>
-            <Text style={styles.nama}>Nama Penjual</Text>
-            <Text style={styles.kota}>Kota</Text>
+            <Text style={styles.nama}>{data.status}</Text>
+            <Text style={styles.kota}>{data.location}</Text>
           </View>
         </View>
         <View style={styles.fullDesc}>
           <View>
-            <Text style={styles.fullTextDesc}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
-              Duis aute irure dolor in reprehenderit in voluptate velit esse
-              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-              cupidatat non proident, sunt in culpa qui officia deserunt mollit
-              anim id est laborum. Duis aute irure dolor in reprehenderit in
-              voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-              officia deserunt mollit anim id est laborum.
-            </Text>
+            <Text style={styles.fullTextDesc}>{data.description}</Text>
           </View>
         </View>
       </ScrollView>
@@ -175,15 +222,16 @@ const PreviewProduct = () => {
             <View style={styles.cardProd}>
               <View style={{marginRight: 16}}>
                 <Image
-                  source={require('../../assets/Images/profilePrev.png')}
+                  style={{width: 35, height: 35}}
+                  source={{uri: data.image_url}}
                 />
               </View>
               <View>
-                <Text style={styles.nama}>Jam Tangan Casio</Text>
+                <Text style={styles.nama}>{data.name}</Text>
                 <Text style={styles.price}>
                   {' '}
                   Rp
-                  {(250000)
+                  {data.base_price
                     .toString()
                     .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1.')}
                 </Text>
@@ -193,18 +241,29 @@ const PreviewProduct = () => {
             <View style={{paddingTop: 16}}>
               <Text style={styles.price}>Harga Tawar</Text>
               <View>
-                <TextInput placeholder="Rp.0,00" style={styles.inputText} />
+                <TextInput
+                  keyboardType="numeric"
+                  onChangeText={val => {
+                    setBidPrice(val);
+                    setSendBid(false);
+                  }}
+                  value={bidPrice}
+                  placeholder="Rp.0,00"
+                  style={styles.inputText}
+                />
               </View>
             </View>
 
             <Button
+              disabled={sendBid ? true : false}
               onPress={() => {
+                handleBidPrice();
                 setVisible(true);
                 setShow(false);
-                setBid(true);
+                setBidPrice('');
               }}
               rounded={'large'}
-              type={'primary'}
+              type={sendBid ? 'secondary' : 'primary'}
               label={'Kirim'}
             />
           </View>
@@ -219,8 +278,14 @@ const PreviewProduct = () => {
 export default PreviewProduct;
 
 const height = Dimensions.get('window').height;
+const width = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
+  wrap: {
+    width: width,
+    height: height * 0.5,
+    // top: -height * 0.05,
+  },
   modalBackground: {
     flex: 1,
 
@@ -301,6 +366,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
   },
   fullDesc: {
+    marginBottom: 80,
     marginHorizontal: 20,
     backgroundColor: '#ffffff',
     padding: 16,
@@ -321,10 +387,11 @@ const styles = StyleSheet.create({
     color: Colors.textSecond,
   },
   buttonWrapper: {
-    position: 'relative',
-    top: -height * 0.15,
-    left: 0,
-    right: 0,
+    zIndex: 10,
+    right: 10,
+    left: 10,
+    position: 'absolute',
+    bottom: 10,
     alignItems: 'center',
   },
   cardProd: {

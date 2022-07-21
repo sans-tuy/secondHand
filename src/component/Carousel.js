@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/Octicons';
 
 const Carousel = ({images}) => {
   const [imgActive, setImgActive] = useState(0);
+
   onChange = nativeEvent => {
     const slide = Math.ceil(
       nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width,

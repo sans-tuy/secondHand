@@ -107,6 +107,29 @@ const ApiPostProduct = (token, data) => async dispatch => {
     .catch(err => console.log(err));
 };
 
+const ApiOrder = (token, data) => () => {
+  axios
+    .post('https://market-final-project.herokuapp.com/buyer/order', data, {
+      headers: {access_token: `${token}`},
+    })
+    .then(val => {
+      console.log(val.data);
+    })
+    .catch(err => console.log(err));
+};
+
+const ApiListOrder = token => () => {
+  axios
+    .get('https://market-final-project.herokuapp.com/buyer/order', {
+      headers: {access_token: `${token}`},
+      params: {access_token: `${token}`},
+    })
+    .then(val => {
+      console.log(val.data);
+    })
+    .catch(err => console.log(err));
+};
+
 export {
   ApiLogin,
   ApiRegister,
@@ -115,4 +138,6 @@ export {
   ApiGetProduct,
   ApiPostProduct,
   ApiGetHome,
+  ApiOrder,
+  ApiListOrder,
 };
