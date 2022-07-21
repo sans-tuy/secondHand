@@ -1,4 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   selectedChip: 1,
@@ -7,6 +7,7 @@ const initialState = {
   notif: [],
   product: [],
   dataProduct: [],
+  dataAkun: [],
 };
 
 export const globalSlice = createSlice({
@@ -31,6 +32,9 @@ export const globalSlice = createSlice({
     setDataProduct: (state, action) => {
       state.dataProduct = action.payload;
     },
+    setProfileData: (state, action) => {
+      state.dataAkun = action.payload;
+    },
   },
 });
 
@@ -42,6 +46,7 @@ export const {
   setNotif,
   setProduct,
   setDataProduct,
+  setProfileData,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

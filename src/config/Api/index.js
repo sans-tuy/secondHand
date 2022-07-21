@@ -5,6 +5,7 @@ import {
   setFavorite,
   setNotif,
   setProduct,
+  setProfileData,
 } from '../Redux/reducer';
 import * as navigation from '../Router/rootNavigation';
 
@@ -32,7 +33,7 @@ const ApiRegister = data => () => {
 const ApiGetWishlist = token => dispatch => {
   axios
     .get('https://market-final-project.herokuapp.com/buyer/wishlist', {
-      headers: {access_token: `${token}`},
+      headers: { access_token: `${token}` },
     })
     .then(val => {
       dispatch(setFavorite(val.data));
@@ -43,7 +44,7 @@ const ApiGetWishlist = token => dispatch => {
 const ApiGetNotif = token => dispatch => {
   axios
     .get('https://market-final-project.herokuapp.com/buyer/wishlist', {
-      headers: {access_token: `${token}`},
+      headers: { access_token: `${token}` },
     })
     .then(val => {
       dispatch(setNotif(val.data));
@@ -67,7 +68,7 @@ const ApiGetHome = () => dispatch => {
 const ApiGetProduct = token => dispatch => {
   axios
     .get('https://market-final-project.herokuapp.com/seller/product', {
-      headers: {access_token: `${token}`},
+      headers: { access_token: `${token}` },
     })
     .then(val => {
       dispatch(setProduct(val.data));
@@ -77,7 +78,7 @@ const ApiGetProduct = token => dispatch => {
 };
 
 const ApiPostProduct = (token, data) => async dispatch => {
-  const {name, description, base_price, location, image, category_ids} = data;
+  const { name, description, base_price, location, image, category_ids } = data;
   const formData = new FormData();
   formData.append('name', name);
   formData.append('description', description);
@@ -107,6 +108,29 @@ const ApiPostProduct = (token, data) => async dispatch => {
     .catch(err => console.log(err));
 };
 
+// export const ProfileData = payload => ({
+//   type: GET_PROFILE_SUCCESS,
+//   payload: payload
+// });
+
+const ApiprofileData = (accessToken) => async dispatch => { //method yang di panggil nanti di screen
+  try {
+    await axios.get('https://market-final-project.herokuapp.com/auth/user', {
+      headers: {
+        access_token: accessToken,
+      }
+    })
+      .then(value => {
+        console.log(value.data);
+        dispatch(setProfileData(value.data));
+        console.log('Get profile Success');
+
+      });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export {
   ApiLogin,
   ApiRegister,
@@ -115,4 +139,5 @@ export {
   ApiGetProduct,
   ApiPostProduct,
   ApiGetHome,
+  ApiprofileData,
 };
