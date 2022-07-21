@@ -12,11 +12,15 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Colors} from '../../utils/colors';
+const arrow = require('../../assets/icon/fi_arrow-left.png');
 
 import Carousel from '../../component/Carousel';
 import Button from '../../component/Button';
 import BottomPopup from '../../component/BottomPopup';
 import Icon from 'react-native-vector-icons/AntDesign';
+import Icon2 from 'react-native-vector-icons/Feather';
+import {ApiOrder} from '../../config/Api';
+import {useDispatch, useSelector} from 'react-redux';
 
 const dummy = [
   {
@@ -57,13 +61,17 @@ const ModalPopup = ({visible, children}) => {
 };
 
 const PreviewProduct = ({route, navigation}) => {
+  const {data} = route.params;
+  const token = useSelector(state => state.global.accessToken);
+
   const [show, setShow] = useState(false);
   const [visible, setVisible] = useState(false);
   const [bid, setBid] = useState(false);
   const [sendBid, setSendBid] = useState(false);
   const [bidPrice, setBidPrice] = useState('');
 
-  const {data} = route.params;
+  const dispatch = useDispatch();
+
   // console.log(data);
   const dataBid = {
     product_id: data.id,
@@ -75,8 +83,8 @@ const PreviewProduct = ({route, navigation}) => {
       Alert.alert('All fields are required');
       return false;
     }
+    dispatch(ApiOrder(token, dataBid));
     setBid(true);
-    console.log(dataBid);
   };
 
   useEffect(() => {
@@ -92,6 +100,18 @@ const PreviewProduct = ({route, navigation}) => {
     <View style={{flex: 1, backgroundColor: '#fff'}}>
       <ScrollView>
         {/* <Carousel images={dummy} /> */}
+
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={{
+            position: 'absolute',
+            top: height * 0.05,
+            zIndex: 100,
+            marginLeft: 10,
+          }}>
+          <Icon2 name="arrow-left" size={30} color="#fff" />
+        </TouchableOpacity>
+
         <Image
           resizeMode="stretch"
           style={styles.wrap}
@@ -156,10 +176,7 @@ const PreviewProduct = ({route, navigation}) => {
       <View style={styles.buttonWrapper}>
         <Button
           disabled={bid ? true : false}
-          onPress={() => {
-            setShow(true);
-            setSendBid(false);
-          }}
+          onPress={() => setShow(true)}
           rounded={'large'}
           type={bid ? 'secondary' : 'primary'}
           size={'large'}
@@ -226,7 +243,10 @@ const PreviewProduct = ({route, navigation}) => {
               <View>
                 <TextInput
                   keyboardType="numeric"
-                  onChangeText={val => setBidPrice(val)}
+                  onChangeText={val => {
+                    setBidPrice(val);
+                    setSendBid(false);
+                  }}
                   value={bidPrice}
                   placeholder="Rp.0,00"
                   style={styles.inputText}
@@ -240,6 +260,7 @@ const PreviewProduct = ({route, navigation}) => {
                 handleBidPrice();
                 setVisible(true);
                 setShow(false);
+                setBidPrice('');
               }}
               rounded={'large'}
               type={sendBid ? 'secondary' : 'primary'}
@@ -262,7 +283,8 @@ const width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   wrap: {
     width: width,
-    height: height * 0.4,
+    height: height * 0.5,
+    // top: -height * 0.05,
   },
   modalBackground: {
     flex: 1,

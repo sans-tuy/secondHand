@@ -20,30 +20,33 @@ import Category from '../../component/Category';
 import SearchBar from '../../component/SearchBar';
 import MiniButton from '../../component/MiniButton';
 import {ApiGetHome} from '../../config/Api';
-import {setDataProduct, setProduct} from '../../config/Redux/reducer';
+import {setDataProduct} from '../../config/Redux/reducer';
 
 const icon = require('../../assets/icon/png_gift_88837.png');
 
+const DATA = [
+  {
+    title: 'Semua',
+  },
+  {
+    title: 'Elektronik',
+  },
+  {
+    title: 'Komputer dan Aksesoris',
+  },
+  {
+    title: 'Fotografi',
+  },
+  {
+    title: 'Makanan dan Minuman',
+  },
+];
+
 function Home({navigation}) {
   const dataProduct = useSelector(state => state.global.dataProduct);
-
-  const DATA = [
-    {
-      title: 'Semua',
-    },
-    {
-      title: 'Elektronik',
-    },
-    {
-      title: 'Komputer dan Aksesoris',
-    },
-    {
-      title: 'Fotografi',
-    },
-    {
-      title: 'Makanan dan Minuman',
-    },
-  ];
+  const [value, setValue] = useState('');
+  const [search, setSearch] = useState('Semua');
+  const [dataList, setDataList] = useState(dataProduct);
 
   const dispatch = useDispatch();
 
@@ -51,9 +54,9 @@ function Home({navigation}) {
     dispatch(ApiGetHome());
   }, []);
 
-  const [value, setValue] = useState('');
-  const [search, setSearch] = useState('Semua');
-  const [dataList, setDataList] = useState(dataProduct);
+  // useEffect(() => {
+  //   setDataList(dataProduct);
+  // }, []);
 
   const setSearchFilter = search => {
     if (search !== 'Semua') {
