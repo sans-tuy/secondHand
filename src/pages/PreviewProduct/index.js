@@ -9,33 +9,35 @@ import {
   Modal,
   TouchableOpacity,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Colors} from '../../utils/colors';
-const arrow = require('../../assets/icon/fi_arrow-left.png');
 
-import Carousel from '../../component/Carousel';
 import Button from '../../component/Button';
 import BottomPopup from '../../component/BottomPopup';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/Feather';
-import {ApiOrder} from '../../config/Api';
-import {useDispatch, useSelector} from 'react-redux';
 
-const dummy = [
-  {
-    id: '1',
-    image: require('../../assets/Images/detailjam.png'),
-  },
-  {
-    id: '2',
-    image: require('../../assets/Images/detailjam.png'),
-  },
-  {
-    id: '3',
-    image: require('../../assets/Images/detailjam.png'),
-  },
-];
+import {ApiOrder, ApiListOrderById} from '../../config/Api';
+import {useDispatch, useSelector} from 'react-redux';
+import {setDataProductById} from '../../config/Redux/reducer';
+import axios from 'axios';
+
+// const dummy = [
+//   {
+//     id: '1',
+//     image: require('../../assets/Images/detailjam.png'),
+//   },
+//   {
+//     id: '2',
+//     image: require('../../assets/Images/detailjam.png'),
+//   },
+//   {
+//     id: '3',
+//     image: require('../../assets/Images/detailjam.png'),
+//   },
+// ];
 
 const ModalPopup = ({visible, children}) => {
   const [showModal, setShowModal] = useState(visible);
@@ -60,19 +62,33 @@ const ModalPopup = ({visible, children}) => {
   );
 };
 
+const Spinner = () => {
+  return (
+    <View style={{flex: 1, justifyContent: 'center'}}>
+      <ActivityIndicator size="large" color="#00ff00" />
+    </View>
+  );
+};
+
 const PreviewProduct = ({route, navigation}) => {
   const {data} = route.params;
   const token = useSelector(state => state.global.accessToken);
+  const dataOrderById = useSelector(state => state.global.dataProductOrderById);
+  const dataProdutId = useSelector(state => state.global.dataProductById);
+  const dataOrderResponse = useSelector(state => state.global.dataOrder);
 
   const [show, setShow] = useState(false);
   const [visible, setVisible] = useState(false);
   const [bid, setBid] = useState(false);
   const [sendBid, setSendBid] = useState(false);
   const [bidPrice, setBidPrice] = useState('');
+  const [sold, setSold] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const dispatch = useDispatch();
 
-  // console.log(data);
+  const id = data.id;
+
   const dataBid = {
     product_id: data.id,
     bid_price: bidPrice,
@@ -88,194 +104,225 @@ const PreviewProduct = ({route, navigation}) => {
   };
 
   useEffect(() => {
+    axios
+      .get(`https://market-final-project.herokuapp.com/buyer/product/${id}`, {
+        headers: {access_token: `${token}`},
+      })
+      .then(val => {
+        const data = val.data;
+        dispatch(setDataProductById(data));
+        setLoading(false);
+      })
+      .catch(err => console.log(err));
+  }, []);
+
+  useEffect(() => {
     if (bidPrice === '') {
       setSendBid(true);
     }
     if (data.status !== 'available') {
       setBid(true);
     }
+    if (data.status === 'sold') {
+      setSold(true);
+    }
   });
 
+  console.log(dataProdutId);
+  console.log(dataOrderResponse);
+
   return (
-    <View style={{flex: 1, backgroundColor: '#fff'}}>
-      <ScrollView>
-        {/* <Carousel images={dummy} /> */}
+    <View style={{flex: 1}}>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <View style={{flex: 1, backgroundColor: '#fff'}}>
+          <ScrollView>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={{
+                position: 'absolute',
+                top: height * 0.05,
+                zIndex: 100,
+                marginLeft: 10,
+              }}>
+              <Icon2 name="arrow-left" size={30} color="#fff" />
+            </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={{
-            position: 'absolute',
-            top: height * 0.05,
-            zIndex: 100,
-            marginLeft: 10,
-          }}>
-          <Icon2 name="arrow-left" size={30} color="#fff" />
-        </TouchableOpacity>
-
-        <Image
-          resizeMode="stretch"
-          style={styles.wrap}
-          key={data.id}
-          source={{uri: data.image_url}}
-        />
-        {/* modal 
-        popup section */}
-        <View>
-          <ModalPopup visible={visible}>
-            <View style={{justifyContent: 'center', flexDirection: 'row'}}>
-              <Text
-                style={{
-                  color: '#fff',
-                  fontSize: 16,
-                  fontWeight: '500',
-                  marginRight: 15,
-                }}>
-                Harga tawarmu berhasil dikirim ke penjual
-              </Text>
-              <TouchableOpacity onPress={() => setVisible(false)}>
-                <Icon name="close" size={20} color="#fff" />
-              </TouchableOpacity>
-            </View>
-          </ModalPopup>
-        </View>
-        {/* //modal 
-        popup section */}
-        {/* content
-         section */}
-        <View style={styles.cardDesc}>
-          <Text style={styles.textTitle}>{data.name}</Text>
-          <Text style={styles.type}>
-            {data.Categories.map(it => it.name)[0]}
-          </Text>
-          <Text style={styles.price}>
-            {' '}
-            Rp
-            {data.base_price
-              .toString()
-              .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1.')}
-          </Text>
-        </View>
-        <View style={styles.cardProf}>
-          <View style={{marginRight: 16}}>
             <Image
-              style={{width: 35, height: 35}}
+              resizeMode="stretch"
+              style={styles.wrap}
+              key={data.id}
               source={{uri: data.image_url}}
             />
-          </View>
-          <View>
-            <Text style={styles.nama}>{data.status}</Text>
-            <Text style={styles.kota}>{data.location}</Text>
-          </View>
-        </View>
-        <View style={styles.fullDesc}>
-          <View>
-            <Text style={styles.fullTextDesc}>{data.description}</Text>
-          </View>
-        </View>
-      </ScrollView>
-      <View style={styles.buttonWrapper}>
-        <Button
-          disabled={bid ? true : false}
-          onPress={() => setShow(true)}
-          rounded={'large'}
-          type={bid ? 'secondary' : 'primary'}
-          size={'large'}
-          label={'Saya Tertarik dan ingin nego'}
-        />
-      </View>
-      {/* content
-       section  */}
-      {/* modal
-       bottom popup 
-       section */}
-      <BottomPopup
-        ennableBackdropDismiss
-        onDismiss={() => {
-          setShow(false);
-        }}
-        show={show}>
-        <ScrollView>
-          <View
-            style={{padding: 32, justifyContent: 'center', marginBottom: 100}}>
-            <Text
-              style={{
-                marginBottom: 16,
-                color: Colors.text,
-                fontSize: 14,
-                fontWeight: '500',
-                fontStyle: 'normal',
-              }}>
-              Masukan Harga Tawaran mu
-            </Text>
-
-            <Text
-              style={{
-                color: Colors.textSecond,
-                fontSize: 14,
-                fontWeight: '500',
-                fontStyle: 'normal',
-              }}>
-              Harga tawaranmu akan diketahui penual, jika penjual cocok kamu
-              akan segera dihubungi penjual.
-            </Text>
-
-            <View style={styles.cardProd}>
+            {/* modal 
+        popup section */}
+            <View>
+              <ModalPopup visible={visible}>
+                <View style={{justifyContent: 'center', flexDirection: 'row'}}>
+                  <Text
+                    style={{
+                      color: '#fff',
+                      fontSize: 16,
+                      fontWeight: '500',
+                      marginRight: 15,
+                    }}>
+                    Harga tawarmu berhasil dikirim ke penjual
+                  </Text>
+                  <TouchableOpacity onPress={() => setVisible(false)}>
+                    <Icon name="close" size={20} color="#fff" />
+                  </TouchableOpacity>
+                </View>
+              </ModalPopup>
+            </View>
+            {/* //modal 
+        popup section */}
+            {/* content
+         section */}
+            <View style={styles.cardDesc}>
+              <Text style={styles.textTitle}>{dataProdutId.name}</Text>
+              <Text style={styles.type}>
+                {data.Categories.map(it => it.name)[0]}
+              </Text>
+              <Text style={styles.price}>
+                {' '}
+                Rp
+                {data.base_price
+                  .toString()
+                  .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1.')}
+              </Text>
+            </View>
+            <View style={styles.cardProf}>
               <View style={{marginRight: 16}}>
                 <Image
                   style={{width: 35, height: 35}}
-                  source={{uri: data.image_url}}
+                  source={{
+                    uri: data.image_url,
+                  }}
                 />
               </View>
               <View>
-                <Text style={styles.nama}>{data.name}</Text>
-                <Text style={styles.price}>
-                  {' '}
-                  Rp
-                  {data.base_price
-                    .toString()
-                    .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1.')}
+                <Text style={styles.nama}>{dataProdutId.User.full_name}</Text>
+                <Text style={styles.kota}>{dataProdutId.User.city}</Text>
+              </View>
+            </View>
+            <View style={styles.fullDesc}>
+              <View>
+                <Text style={styles.fullTextDesc}>
+                  {dataProdutId.description}
                 </Text>
               </View>
             </View>
-
-            <View style={{paddingTop: 16}}>
-              <Text style={styles.price}>Harga Tawar</Text>
-              <View>
-                <TextInput
-                  keyboardType="numeric"
-                  onChangeText={val => {
-                    setBidPrice(val);
-                    setSendBid(false);
-                  }}
-                  value={bidPrice}
-                  placeholder="Rp.0,00"
-                  style={styles.inputText}
-                />
-              </View>
-            </View>
-
+          </ScrollView>
+          <View style={styles.buttonWrapper}>
             <Button
-              disabled={sendBid ? true : false}
-              onPress={() => {
-                handleBidPrice();
-                setVisible(true);
-                setShow(false);
-                setBidPrice('');
-              }}
+              disabled={bid ? true : false}
+              onPress={() => setShow(true)}
               rounded={'large'}
-              type={sendBid ? 'secondary' : 'primary'}
-              label={'Kirim'}
+              type={bid ? 'secondary' : 'primary'}
+              size={'large'}
+              label={sold ? 'Terjual' : 'Saya Tertarik dan ingin nego'}
             />
           </View>
-        </ScrollView>
-      </BottomPopup>
-      {/* modal
+          {/* content
+       section  */}
+          {/* modal
+       bottom popup 
+       section */}
+          <BottomPopup
+            ennableBackdropDismiss
+            onDismiss={() => {
+              setShow(false);
+            }}
+            show={show}>
+            <ScrollView>
+              <View
+                style={{
+                  padding: 32,
+                  justifyContent: 'center',
+                  marginBottom: 100,
+                }}>
+                <Text
+                  style={{
+                    marginBottom: 16,
+                    color: Colors.text,
+                    fontSize: 14,
+                    fontWeight: '500',
+                    fontStyle: 'normal',
+                  }}>
+                  Masukan Harga Tawaran mu
+                </Text>
+
+                <Text
+                  style={{
+                    color: Colors.textSecond,
+                    fontSize: 14,
+                    fontWeight: '500',
+                    fontStyle: 'normal',
+                  }}>
+                  Harga tawaranmu akan diketahui penual, jika penjual cocok kamu
+                  akan segera dihubungi penjual.
+                </Text>
+
+                <View style={styles.cardProd}>
+                  <View style={{marginRight: 16}}>
+                    <Image
+                      style={{width: 35, height: 35}}
+                      source={{uri: dataProdutId.image_url}}
+                    />
+                  </View>
+                  <View>
+                    <Text style={styles.nama}>{dataProdutId.name}</Text>
+                    <Text style={styles.price}>
+                      {' '}
+                      Rp
+                      {data.base_price
+                        .toString()
+                        .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1.')}
+                    </Text>
+                  </View>
+                </View>
+
+                <View style={{paddingTop: 16}}>
+                  <Text style={styles.price}>Harga Tawar</Text>
+                  <View>
+                    <TextInput
+                      keyboardType="numeric"
+                      onChangeText={val => {
+                        setBidPrice(val);
+                        setSendBid(false);
+                      }}
+                      value={bidPrice}
+                      placeholder="Rp.0,00"
+                      style={styles.inputText}
+                    />
+                  </View>
+                </View>
+
+                <Button
+                  disabled={sendBid ? true : false}
+                  onPress={() => {
+                    handleBidPrice();
+                    setVisible(true);
+                    setShow(false);
+                    setBidPrice('');
+                  }}
+                  rounded={'large'}
+                  type={sendBid ? 'secondary' : 'primary'}
+                  label={'Kirim'}
+                />
+              </View>
+            </ScrollView>
+          </BottomPopup>
+          {/* modal
        bottom popup section */}
+        </View>
+      )}
     </View>
   );
 };
 
-export default PreviewProduct;
+export default React.memo(PreviewProduct);
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;

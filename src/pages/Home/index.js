@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,16 +11,19 @@ import {
 } from 'react-native';
 
 import {useDispatch, useSelector} from 'react-redux';
-// import * as navigation from '../../config/Router/rootNavigation';
 
 import LinearGradient from 'react-native-linear-gradient';
 
-import Banner from '../../component/Banner';
 import Category from '../../component/Category';
 import SearchBar from '../../component/SearchBar';
 import MiniButton from '../../component/MiniButton';
-import {ApiGetHome} from '../../config/Api';
-import {setDataProduct} from '../../config/Redux/reducer';
+import {
+  ApiGetHome,
+  ApiListOrderById,
+  ApiGetProductById,
+  ApiGetBanner,
+} from '../../config/Api';
+import Carousel from '../../component/Carousel';
 
 const icon = require('../../assets/icon/png_gift_88837.png');
 
@@ -42,21 +45,44 @@ const DATA = [
   },
 ];
 
+const dummy = [
+  {
+    id: '1',
+    title: 'Laliga',
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/market-final-project.appspot.com/o/banner%2FBAN-1656828994178-lega_calcio.png?alt=media',
+  },
+  {
+    id: '2',
+    title: 'Premier',
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/market-final-project.appspot.com/o/banner%2FBAN-1656829026499-la_liga.jpg?alt=media',
+  },
+  {
+    id: '3',
+    title: 'Liga Indonesia',
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/market-final-project.appspot.com/o/banner%2FBAN-1656829026499-la_liga.jpg?alt=media',
+  },
+];
+
 function Home({navigation}) {
-  const dataProduct = useSelector(state => state.global.dataProduct);
   const [value, setValue] = useState('');
   const [search, setSearch] = useState('Semua');
   const [dataList, setDataList] = useState(dataProduct);
+
+  const token = useSelector(state => state.global.accessToken);
+  const dataProduct = useSelector(state => state.global.dataProduct);
+  const dataBanner = useSelector(state => state.global.dataBanner);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(ApiGetHome());
+    dispatch(ApiGetBanner());
   }, []);
 
-  // useEffect(() => {
-  //   setDataList(dataProduct);
-  // }, []);
+  console.log(dataBanner);
 
   const setSearchFilter = search => {
     if (search !== 'Semua') {
@@ -98,19 +124,15 @@ function Home({navigation}) {
                   setValue('');
                 }}
               />
-              <View style={{marginHorizontal: 15, marginTop: 15}}>
-                <Banner
-                  source={icon}
-                  title="Bulan Ramadhan Banyak Diskon!"
-                  subtitle="Diskon Hingga"
-                  discount="60%"
-                />
-              </View>
+              <Carousel
+                data={dataBanner}
+                subtitle="Diskon Hingga"
+                discount="60%"
+              />
 
-              <View style={{marginHorizontal: 15, marginTop: 15}}>
+              <View style={{marginHorizontal: 15}}>
                 <Text style={styles.textCategory}>Telusuri Kategori</Text>
               </View>
-
               <View style={styles.containerButton}>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   {DATA.map((item, index) => (
@@ -250,4 +272,15 @@ const styles = StyleSheet.create({
                     />
                   </View>
                 ))} */
+}
+
+{
+  /* <View style={{marginHorizontal: 15, marginTop: 15}}>
+                <Banner
+                  source={icon}
+                  title="Bulan Ramadhan Banyak Diskon!"
+                  subtitle="Diskon Hingga"
+                  discount="60%"
+                />
+              </View> */
 }

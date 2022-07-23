@@ -7,6 +7,10 @@ const initialState = {
   notif: [],
   product: [],
   dataProduct: [],
+  dataOrder: [],
+  dataProductById: [],
+  dataProductOrderById: [],
+  dataBanner: [],
 };
 
 export const globalSlice = createSlice({
@@ -31,6 +35,18 @@ export const globalSlice = createSlice({
     setDataProduct: (state, action) => {
       state.dataProduct = action.payload;
     },
+    setDataOrder: (state, action) => {
+      state.dataOrder = action.payload;
+    },
+    setDataProductById: (state, action) => {
+      state.dataProductById = action.payload;
+    },
+    setDataProductOrderById: (state, action) => {
+      state.dataProductOrderById = action.payload;
+    },
+    setDataBanner: (state, action) => {
+      state.dataBanner = action.payload;
+    },
   },
 });
 
@@ -42,6 +58,10 @@ export const {
   setNotif,
   setProduct,
   setDataProduct,
+  setDataOrder,
+  setDataProductById,
+  setDataProductOrderById,
+  setDataBanner,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;
