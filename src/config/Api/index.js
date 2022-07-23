@@ -5,6 +5,10 @@ import {
   setFavorite,
   setNotif,
   setProduct,
+  setDataProductById,
+  setDataProductOrderById,
+  setDataOrder,
+  setDataBanner,
 } from '../Redux/reducer';
 import * as navigation from '../Router/rootNavigation';
 
@@ -76,6 +80,18 @@ const ApiGetProduct = token => dispatch => {
     .catch(err => console.log(err));
 };
 
+const ApiGetProductById = (token, id) => async dispatch => {
+  axios
+    .get(`https://market-final-project.herokuapp.com/buyer/product/${id}`, {
+      headers: {access_token: `${token}`},
+    })
+    .then(val => {
+      const data = val.data;
+      dispatch(setDataProductById(data));
+    })
+    .catch(err => console.log(err));
+};
+
 const ApiPostProduct = (token, data) => async dispatch => {
   const {name, description, base_price, location, image, category_ids} = data;
   const formData = new FormData();
@@ -113,21 +129,35 @@ const ApiOrder = (token, data) => () => {
       headers: {access_token: `${token}`},
     })
     .then(val => {
-      console.log(val.data);
+      setDataOrder(val.data);
+      // console.log(val.data);
     })
     .catch(err => console.log(err));
 };
 
-const ApiListOrder = token => () => {
+const ApiListOrderById = (token, id) => async dispatch => {
   axios
-    .get('https://market-final-project.herokuapp.com/buyer/order', {
+    .get(`https://market-final-project.herokuapp.com/buyer/order/23`, {
       headers: {access_token: `${token}`},
-      params: {access_token: `${token}`},
     })
     .then(val => {
-      console.log(val.data);
+      const data = val.data;
+      // dispatch(setDataProductOrderById(data));
+      console.log(data);
     })
     .catch(err => console.log(err));
+};
+
+const ApiGetBanner = () => dispatch => {
+  axios
+    .get('https://market-final-project.herokuapp.com/seller/banner')
+    .then(val => {
+      const data = val.data;
+      dispatch(setDataBanner(data));
+    })
+    .catch(err => {
+      console.log(err);
+    });
 };
 
 export {
@@ -139,5 +169,7 @@ export {
   ApiPostProduct,
   ApiGetHome,
   ApiOrder,
-  ApiListOrder,
+  ApiGetProductById,
+  ApiListOrderById,
+  ApiGetBanner,
 };
