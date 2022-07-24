@@ -10,12 +10,12 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 const SearchBar = ({
   placeholder,
-  onPressDelete,
+
   onPressSearch,
   value,
   onChangeText,
 }) => {
-  const [onFocus, setOnFocus] = useState(false);
+  const [onFocus, setOnFocus] = useState(true);
 
   const handleOnFocus = () => {
     setOnFocus(true);
@@ -31,20 +31,14 @@ const SearchBar = ({
           style={onFocus ? styles.inputContainerFocus : styles.inputContainer}>
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={onFocus ? onPressDelete : onPressSearch}>
-            <Icon
-              name={onFocus ? 'close-circle' : 'search'}
-              color="#8A8A8A"
-              size={30}
-            />
+            onPress={onPressSearch}>
+            <Icon name={'search'} color="#8A8A8A" size={30} />
           </TouchableOpacity>
           <TextInput
             onChangeText={onChangeText}
             value={value}
             style={styles.textInput}
             placeholder={placeholder}
-            onBlur={handleOnBlur}
-            onFocus={handleOnFocus}
           />
         </View>
       </View>

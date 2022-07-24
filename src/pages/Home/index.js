@@ -10,6 +10,7 @@ import {
   LogBox,
 } from 'react-native';
 
+import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 
 import LinearGradient from 'react-native-linear-gradient';
@@ -23,6 +24,7 @@ import {
   ApiGetProductById,
   ApiGetBanner,
 } from '../../config/Api';
+import {setDataProduct} from '../../config/Redux/reducer';
 import Carousel from '../../component/Carousel';
 
 const icon = require('../../assets/icon/png_gift_88837.png');
@@ -67,9 +69,10 @@ const dummy = [
 ];
 
 function Home({navigation}) {
-  const [value, setValue] = useState('');
+  // const [value, setValue] = useState('');
   const [search, setSearch] = useState('Semua');
-  const [dataList, setDataList] = useState(dataProduct);
+  const [dataList, setDataList] = useState([]);
+  const [typeSearch, setTypeSearch] = useState('');
 
   const token = useSelector(state => state.global.accessToken);
   const dataProduct = useSelector(state => state.global.dataProduct);
@@ -78,11 +81,24 @@ function Home({navigation}) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(ApiGetHome());
+    axios
+      .get('https://market-final-project.herokuapp.com/buyer/product')
+      .then(val => {
+        const data = val.data;
+        dispatch(setDataProduct(data));
+        setDataList(data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
     dispatch(ApiGetBanner());
+    () => {
+      setDataList(dataProduct);
+    };
   }, []);
 
-  console.log(dataBanner);
+  // console.log(dataBanner);
 
   const setSearchFilter = search => {
     if (search !== 'Semua') {
@@ -97,13 +113,29 @@ function Home({navigation}) {
     setSearch(search);
   };
 
-  console.log(dataProduct);
+  const searchTyping = text => {
+    if (text) {
+      const newData = dataList.filter(item => {
+        const itemData = item.name ? item.name.toUpperCase() : ''.toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setDataList(newData);
+      setTypeSearch(text);
+    } else {
+      setDataList(dataProduct);
+      setSearch(text);
+    }
+  };
+
+  // console.log(dataProduct);
   return (
     <LinearGradient
       colors={['#FFE9C9', '#ffffff']}
       start={{x: 1, y: 0}}
       end={{x: 1, y: 1}}>
       <View style={styles.containerCategory}>
+        {/* {dataList === [] ? dataProduct : dataList} */}
         <FlatList
           numColumns={2}
           keyExtractor={item => item.id}
@@ -113,15 +145,13 @@ function Home({navigation}) {
             <>
               <SearchBar
                 placeholder="Cari di Second Chance"
-                value={value}
-                onChangeText={text => setValue(text)}
-                onPressSearch={() => {
-                  console.log(value);
-                  setValue('');
+                value={typeSearch}
+                onChangeText={text => {
+                  setTypeSearch(text);
                 }}
-                onPressDelete={() => {
-                  console.log('Hello Delete Button Search');
-                  setValue('');
+                onPressSearch={() => {
+                  searchTyping(typeSearch);
+                  setTypeSearch('');
                 }}
               />
               <Carousel

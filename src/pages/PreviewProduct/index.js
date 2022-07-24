@@ -19,7 +19,7 @@ import BottomPopup from '../../component/BottomPopup';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/Feather';
 
-import {ApiOrder, ApiListOrderById} from '../../config/Api';
+import {ApiOrder, ApiListOrderById, ApiListOrder} from '../../config/Api';
 import {useDispatch, useSelector} from 'react-redux';
 import {setDataProductById} from '../../config/Redux/reducer';
 import axios from 'axios';
@@ -76,6 +76,7 @@ const PreviewProduct = ({route, navigation}) => {
   const dataOrderById = useSelector(state => state.global.dataProductOrderById);
   const dataProdutId = useSelector(state => state.global.dataProductById);
   const dataOrderResponse = useSelector(state => state.global.dataOrder);
+  const dataListOrder = useSelector(state => state.global.dataListProductOrder);
 
   const [show, setShow] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -114,6 +115,8 @@ const PreviewProduct = ({route, navigation}) => {
         setLoading(false);
       })
       .catch(err => console.log(err));
+
+    dispatch(ApiListOrder(token));
   }, []);
 
   useEffect(() => {
@@ -128,8 +131,9 @@ const PreviewProduct = ({route, navigation}) => {
     }
   });
 
-  console.log(dataProdutId);
-  console.log(dataOrderResponse);
+  // console.log(dataProdutId);
+  console.log(dataListOrder);
+  // console.log(dataOrderResponse);
 
   return (
     <View style={{flex: 1}}>

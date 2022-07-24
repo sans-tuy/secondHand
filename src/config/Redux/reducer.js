@@ -10,6 +10,7 @@ const initialState = {
   dataOrder: [],
   dataProductById: [],
   dataProductOrderById: [],
+  dataListProductOrder: [],
   dataBanner: [],
 };
 
@@ -41,6 +42,9 @@ export const globalSlice = createSlice({
     setDataProductById: (state, action) => {
       state.dataProductById = action.payload;
     },
+    setDataListProductOrder: (state, action) => {
+      state.dataListProductOrder = action.payload;
+    },
     setDataProductOrderById: (state, action) => {
       state.dataProductOrderById = action.payload;
     },
@@ -60,6 +64,7 @@ export const {
   setDataProduct,
   setDataOrder,
   setDataProductById,
+  setDataListProductOrder,
   setDataProductOrderById,
   setDataBanner,
 } = globalSlice.actions;

@@ -7,6 +7,7 @@ import {
   setProduct,
   setDataProductById,
   setDataProductOrderById,
+  setDataListProductOrder,
   setDataOrder,
   setDataBanner,
 } from '../Redux/reducer';
@@ -137,13 +138,26 @@ const ApiOrder = (token, data) => () => {
 
 const ApiListOrderById = (token, id) => async dispatch => {
   axios
-    .get(`https://market-final-project.herokuapp.com/buyer/order/23`, {
+    .get(`https://market-final-project.herokuapp.com/buyer/order/${id}`, {
       headers: {access_token: `${token}`},
     })
     .then(val => {
       const data = val.data;
-      // dispatch(setDataProductOrderById(data));
+      dispatch(setDataProductOrderById(data));
       console.log(data);
+    })
+    .catch(err => console.log(err));
+};
+
+const ApiListOrder = token => dispatch => {
+  axios
+    .get('https://market-final-project.herokuapp.com/buyer/order', {
+      headers: {access_token: `${token}`},
+    })
+    .then(val => {
+      const data = val.data;
+      dispatch(setDataListProductOrder(data));
+      // console.log(data);
     })
     .catch(err => console.log(err));
 };
@@ -170,6 +184,7 @@ export {
   ApiGetHome,
   ApiOrder,
   ApiGetProductById,
+  ApiListOrder,
   ApiListOrderById,
   ApiGetBanner,
 };
