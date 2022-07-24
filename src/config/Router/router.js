@@ -68,7 +68,11 @@ const MainApp = () => {
         component={Notification}
         options={{headerShown: false}}
       />
-      <Tab.Screen name="Jual" component={Sell} options={{headerShown: false}} />
+      <Tab.Screen
+        name="Jual"
+        component={DetailProduct}
+        options={{headerShown: false}}
+      />
       <Tab.Screen
         name="Daftar Jual"
         component={SellList}
