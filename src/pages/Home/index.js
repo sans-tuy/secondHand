@@ -97,7 +97,7 @@ function Home({navigation}) {
     setSearch(search);
   };
 
-  // console.log(dataProduct);
+  console.log(dataProduct);
   return (
     <LinearGradient
       colors={['#FFE9C9', '#ffffff']}
