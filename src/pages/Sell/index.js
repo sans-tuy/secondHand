@@ -1,12 +1,9 @@
 import {StyleSheet, Text, View} from 'react-native';
+import * as navigation from '../../config/Router/rootNavigation';
 import React from 'react';
 
 const Sell = () => {
-  return (
-    <View>
-      <Text>Sells</Text>
-    </View>
-  );
+  return navigation.navigate('DetailProduct');
 };
 
 export default Sell;

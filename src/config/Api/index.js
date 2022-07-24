@@ -10,6 +10,7 @@ import {
   setDataListProductOrder,
   setDataOrder,
   setDataBanner,
+  setDataUser,
 } from '../Redux/reducer';
 import * as navigation from '../Router/rootNavigation';
 
@@ -30,6 +31,17 @@ const ApiRegister = data => () => {
     .then(val => {
       console.log(val.data);
       navigation.navigate('Login');
+    })
+    .catch(err => console.log(err));
+};
+
+const ApiGetUser = token => dispatch => {
+  axios
+    .get('https://market-final-project.herokuapp.com/auth/user', {
+      headers: {access_token: `${token}`},
+    })
+    .then(val => {
+      dispatch(setDataUser(val.data));
     })
     .catch(err => console.log(err));
 };
@@ -187,4 +199,5 @@ export {
   ApiListOrder,
   ApiListOrderById,
   ApiGetBanner,
+  ApiGetUser,
 };
