@@ -10,16 +10,18 @@ import {
   Alert,
   Modal,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {useIsFocused} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useSelector, useDispatch} from 'react-redux';
 import SelectDropdown from 'react-native-select-dropdown';
 import ImagePicker from 'react-native-image-crop-picker';
 import * as navigation from '../../config/Router/rootNavigation';
-import {ApiPostProduct, ApiRegister} from '../../config/Api';
+import {ApiGetUser, ApiPostProduct, ApiRegister} from '../../config/Api';
 
 const DetailProduct = () => {
+  const isFocused = useIsFocused();
   const [harga, setharga] = useState('');
   const [nama, setnama] = useState('');
   const [deskripsi, setdeskripsi] = useState('');
@@ -29,6 +31,7 @@ const DetailProduct = () => {
   const [lokasi, setlokasi] = useState();
   const [modalVisible, setModalVisible] = useState(false);
   const token = useSelector(state => state.global.accessToken);
+  const user = useSelector(state => state.global.user);
   const category = [
     'Elektronik',
     'Komputer dan Aksesoris',
@@ -62,6 +65,7 @@ const DetailProduct = () => {
     }
     dispatch(ApiPostProduct(token, data));
   };
+  
   const imagePicker = async () => {
     ImagePicker.openPicker({
       width: 450,
@@ -70,10 +74,17 @@ const DetailProduct = () => {
     }).then(image => {
       console.log(image);
       const uploadUri =
-        Platform.OS === 'IOS' ? image.path.replace('file://', '') : image.path;
+      Platform.OS === 'IOS' ? image.path.replace('file://', '') : image.path;
       setimage(uploadUri);
     });
   };
+  useEffect(() => {
+    dispatch(ApiGetUser(token));
+    user['address'] == undefined
+      ? navigation.navigate('Akun')
+      : console.log(user);
+  }, [isFocused]);
+
   return (
     <View style={styles.container}>
       <ScrollView>

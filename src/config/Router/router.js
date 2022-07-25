@@ -13,7 +13,7 @@ import Register from '../../pages/Register';
 import PreviewProduct from '../../pages/PreviewProduct';
 import PreviewProductSeller from '../../pages/PreviewProductSeller';
 import DetailProduct from '../../pages/DetailProduct';
-import EditAccount from '../../pages/EditAccount';
+import EditAccount from "../../pages/EditAccount";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -69,7 +69,11 @@ const MainApp = () => {
         component={Notification}
         options={{ headerShown: false }}
       />
-      <Tab.Screen name="Jual" component={Sell} options={{ headerShown: false }} />
+      <Tab.Screen
+        name="Jual"
+        component={DetailProduct}
+        options={{headerShown: false}}
+      />
       <Tab.Screen
         name="Daftar Jual"
         component={SellList}
@@ -122,6 +126,11 @@ const Router = () => {
         name="EditAccount"
         component={EditAccount}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="EditAccount"
+        component={EditAccount}
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   );

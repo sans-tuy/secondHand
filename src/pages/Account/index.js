@@ -1,6 +1,6 @@
-import { Image, Modal, Pressable, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import {Image, Modal, Pressable, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import * as navigation from '../../config/Router/rootNavigation';
 import { setAccessToken } from '../../config/Redux/reducer';
 import LottieView from 'lottie-react-native';
@@ -18,7 +18,6 @@ const Account = () => {
     console.log(token)
     console.log(dataAkun)
   }, []);
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Akun Saya</Text>
@@ -29,7 +28,7 @@ const Account = () => {
             source={require('../../assets/icon/fi_camera.png')}
           />
         </View>
-        <Text style={styles.nameUser}>{dataAkun.email}</Text>
+        <Text>{dataAkun.full_name}</Text>
       </View>
       <View style={styles.wrapperText}>
         <Image

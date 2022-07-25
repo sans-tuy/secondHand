@@ -7,6 +7,12 @@ const initialState = {
   notif: [],
   product: [],
   dataProduct: [],
+  dataOrder: [],
+  dataProductById: [],
+  dataProductOrderById: [],
+  dataListProductOrder: [],
+  dataBanner: [],
+  user: [],
   dataAkun: [],
 };
 
@@ -32,6 +38,24 @@ export const globalSlice = createSlice({
     setDataProduct: (state, action) => {
       state.dataProduct = action.payload;
     },
+    setDataOrder: (state, action) => {
+      state.dataOrder = action.payload;
+    },
+    setDataProductById: (state, action) => {
+      state.dataProductById = action.payload;
+    },
+    setDataListProductOrder: (state, action) => {
+      state.dataListProductOrder = action.payload;
+    },
+    setDataProductOrderById: (state, action) => {
+      state.dataProductOrderById = action.payload;
+    },
+    setDataBanner: (state, action) => {
+      state.dataBanner = action.payload;
+    },
+    setDataUser: (state, action) => {
+      state.user = action.payload;
+    },
     setProfileData: (state, action) => {
       state.dataAkun = action.payload;
     },
@@ -46,6 +70,12 @@ export const {
   setNotif,
   setProduct,
   setDataProduct,
+  setDataOrder,
+  setDataProductById,
+  setDataListProductOrder,
+  setDataProductOrderById,
+  setDataBanner,
+  setDataUser,
   setProfileData,
 } = globalSlice.actions;
 

@@ -19,7 +19,7 @@ const BottomPopup = ({
   ennableBackdropDismiss,
   onPress,
 }) => {
-  const bottomSheetHeigt = Dimensions.get('window').height * 0.8;
+  const bottomSheetHeigt = Dimensions.get('window').height * 0.6;
   const deviceWidth = Dimensions.get('window').width;
   const [open, setOpen] = useState(show);
   const bottom = useRef(new Animated.Value(-bottomSheetHeigt)).current;
