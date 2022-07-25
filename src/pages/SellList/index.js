@@ -7,13 +7,13 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import MiniButton from '../../component/MiniButton2';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Notif from '../../component/notif';
-import {setSelectedChip} from '../../config/Redux/reducer';
-import {useEffect} from 'react';
-import {ApiGetProduct, ApiGetWishlist} from '../../config/Api';
+import { setSelectedChip } from '../../config/Redux/reducer';
+import { useEffect } from 'react';
+import { ApiGetProduct, ApiGetWishlist, ApiprofileData } from '../../config/Api';
 import * as navigation from '../../config/Router/rootNavigation';
 
 function Produk(props) {
@@ -34,7 +34,7 @@ function Produk(props) {
               onPress={() => navigation.navigate('PreviewProductSeller')}>
               <View style={styles.boxProduct}>
                 <Image
-                  source={{uri: `${data.image_url}`}}
+                  source={{ uri: `${data.image_url}` }}
                   style={styles.imageProduct}
                 />
                 <Text style={styles.titleProduct}>{data.name}</Text>
@@ -59,15 +59,15 @@ function Favorite(props) {
   // ];
   const favorite = props.fav;
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       {favorite.length == 0 ? (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <Image source={require('../../assets/Images/diminati.png')} />
         </View>
       ) : (
         favorite.map((data, index) => (
           <Notif
-            image={{uri: data.image_url}}
+            image={{ uri: data.image_url }}
             titleNotif={data.name}
             textNotif={data.description}
             dateNotif={data.updated_at}
@@ -92,31 +92,35 @@ const SellList = () => {
   const token = useSelector(state => state.global.accessToken);
   const produk = useSelector(state => state.global.product);
   const favorite = useSelector(state => state.global.favorite);
+  const dataAkun = useSelector(state => state.global.dataAkun);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(ApiGetWishlist(token));
     dispatch(ApiGetProduct(token));
+    dispatch(ApiprofileData(token));
   }, []);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Daftar Jual Saya</Text>
       <View style={styles.tile}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <Image
-            source={{uri: 'https://picsum.photos/200/300'}}
+            source={{ uri: 'https://picsum.photos/200/300' }}
             style={styles.profile}
           />
           <View>
-            <Text>Nama Penjual</Text>
-            <Text>Kota</Text>
+            <Text>{dataAkun.full_name}</Text>
+            <Text>{dataAkun.city}</Text>
           </View>
         </View>
-        <View style={styles.buttonEdit}>
-          <Text style={{fontWeight: '900'}}>Edit</Text>
-        </View>
+        <TouchableOpacity onPress={() => navigation.navigate('EditAccount')}>
+          <View style={styles.buttonEdit}>
+            <Text style={{ fontWeight: '900' }}>Edit</Text>
+          </View>
+        </TouchableOpacity>
       </View>
-      <View style={{flexDirection: 'row', marginBottom: 20}}>
+      <View style={{ flexDirection: 'row', marginBottom: 20 }}>
         <ScrollView horizontal>
           <MiniButton
             textButton={'Produk'}
