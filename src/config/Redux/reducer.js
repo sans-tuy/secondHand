@@ -13,6 +13,7 @@ const initialState = {
   dataListProductOrder: [],
   dataBanner: [],
   user: [],
+  dataAkun: [],
 };
 
 export const globalSlice = createSlice({
@@ -55,6 +56,9 @@ export const globalSlice = createSlice({
     setDataUser: (state, action) => {
       state.user = action.payload;
     },
+    setProfileData: (state, action) => {
+      state.dataAkun = action.payload;
+    },
   },
 });
 
@@ -72,6 +76,7 @@ export const {
   setDataProductOrderById,
   setDataBanner,
   setDataUser,
+  setProfileData,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

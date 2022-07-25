@@ -1,139 +1,156 @@
 import {
-  Image,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-  Pressable,
-  ScrollView,
+    Image,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+    Pressable,
+    ScrollView,
+    Alert,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import SelectList from 'react-native-dropdown-select-list';
 import MiniButton from '../../component/MiniButton3';
-import {ApiprofileData, ApiChangeDataProfile} from '../../config/Api';
-import {useDispatch, useSelector} from 'react-redux';
+import { ApiprofileData, ApiChangeDataProfile } from '../../config/Api';
+import { useDispatch, useSelector } from 'react-redux';
+import ImagePicker from 'react-native-image-crop-picker';
 
-const Profile = ({navigation: {goBack}}) => {
-  const [eye, seteye] = useState('eye-outline');
-  const [selected, setSelected] = React.useState('');
 
-  const [harga, setharga] = useState('');
-  const [name, setnama_full] = useState('');
-  const [deskripsi, setdeskripsi] = useState('');
-  const [kategori, setkategori] = useState([]);
-  const [response, setResponse] = useState({assets: [{uri: ''}]});
-  const [image, setimage] = useState('');
-  const [lokasi, setlokasi] = useState();
-  const [modalVisible, setModalVisible] = useState(false);
+const Profile = ({ navigation: { goBack } }) => {
+    const [eye, seteye] = useState('eye-outline');
+    const [selected, setSelected] = React.useState('');
 
-  const data2 = [
-    {key: '1', value: 'jakarta'},
-    {key: '2', value: 'Bandung'},
-    {key: '3', value: 'Surabaya'},
-    {key: '4', value: 'Brebes'},
-    {key: '5', value: 'Semarang'},
-    {key: '6', value: 'Medan'},
-    {key: '7', value: 'Jayapura'},
-  ];
+    const [harga, setharga] = useState('');
+    const [nama, setnama] = useState('');
+    const [alamat, setalamat] = useState('');
+    const [gambar, setGam] = useState([]);
+    const [no_hp, setHp] = useState({ assets: [{ uri: '' }] });
+    const [image, setimage] = useState('');
+    const [lokasi, setlokasi] = useState();
+    const [modalVisible, setModalVisible] = useState(false);
 
-  const dispatch = useDispatch();
-  const token = useSelector(state => state.global.accessToken);
-  const dataAkun = useSelector(state => state.global.dataAkun);
+    const data2 = [
+        { key: '1', value: 'jakarta' },
+        { key: '2', value: 'Bandung' },
+        { key: '3', value: 'Surabaya' },
+        { key: '4', value: 'Brebes' },
+        { key: '5', value: 'Semarang' },
+        { key: '6', value: 'Medan' },
+        { key: '7', value: 'Jayapura' },
+    ];
 
-  const data = {
-    full_name: name,
-  };
+    const dispatch = useDispatch();
+    const token = useSelector(state => state.global.accessToken);
+    const dataAkun = useSelector(state => state.global.dataAkun);
 
-  const terbitkan = () => {
-    if (name == '') {
-      Alert.alert('All fields are required');
-      return false;
-    }
-    dispatch(ApiChangeDataProfile(token, data));
-  };
+    const data = {
+        full_name: nama ,
+        address: alamat,
+        phone_number: no_hp,
+        // image : gambar
+    };
 
-  useEffect(() => {
-    dispatch(ApiprofileData(token));
-    console.log(token);
-    console.log(dataAkun);
-  }, []);
-  return (
-    <View style={styles.container}>
-      <View>
-        <View style={styles.header1}>
-          <TouchableOpacity onPress={() => goBack()}>
-            <Image
-              source={require('../../assets/icon/fi_arrow-left.png')}
-              style={styles.icon}
-            />
-          </TouchableOpacity>
-          <View>
-            <Text style={styles.textHeader}>Ubah akun</Text>
-          </View>
-        </View>
-        <ScrollView>
-          <View>
-            <View style={{alignItems: 'center'}}>
-              <View style={styles.wrapperIcon}>
-                <Image
-                  style={styles.icon}
-                  source={require('../../assets/icon/fi_camera.png')}
-                />
-              </View>
-            </View>
-            <View
-              style={{
-                marginBottom: 30,
-              }}>
-              <MiniButton textButton={'Ubah foto profile akun'} />
-            </View>
+    const simpan = () => {
+        if (
+            nama == '' ||
+            alamat == '' ||
+            no_hp == '' 
+        ) {
+            Alert.alert('All fields are required');
+            return false;
+        }
+        dispatch(ApiChangeDataProfile(token, data));
+    };
 
-            <Text style={{color: 'black'}}>Nama*</Text>
-            <TextInput
-              placeholder="Nama Lengkap"
-              value={name}
-              onChangeText={val => setnama_full(val)}
-              style={styles.inputText}
-            />
+    // const imagePicker = async () => {
+    //     ImagePicker.openPicker({
+    //       width: 450,
+    //       height: 450,
+    //       cropping: true,
+    //     }).then(image => {
+    //       console.log(image);
+    //       const uploadUri =
+    //         Platform.OS === 'IOS' ? image.path.replace('file://', '') : image.path;
+    //       setgam(uploadUri);
+    //     });
+    //   };
 
-            <Text style={{color: 'black'}}>Kota*</Text>
+    useEffect(() => {
+        dispatch(ApiprofileData(token));
+        console.log(token)
+        console.log(dataAkun)
+    }, []);
+    return (
+        <View style={styles.container}>
             <View>
-              <SelectList
-                data={data2}
-                setSelected={setSelected}
-                dropdownStyles={{backgroundColor: '#E2D4F0'}}
-                dropdownItemStyles={{marginHarizontal: 10}}
-                dropdownTextStyles={{color: 'black'}}
-                placeholder="Pilih kota"
-                maxHeight={200}
-                boxStyle={{color: 'red'}}
-                value={dataAkun.city}
-              />
+                <View style={styles.header1}>
+                    <TouchableOpacity onPress={() => goBack()}>
+                        <Image
+                            source={require('../../assets/icon/fi_arrow-left.png')}
+                            style={styles.icon}
+                        />
+                    </TouchableOpacity>
+                    <View>
+                        <Text style={styles.textHeader}>Ubah akun</Text>
+                    </View>
+                </View>
+                <ScrollView>
+                    <View>
+                        <View style={{ alignItems: 'center' }}>
+                            <View style={styles.wrapperIcon}>
+                                <Image
+                                    style={styles.icon}
+                                    source={require('../../assets/icon/fi_camera.png')}
+                                />
+                            </View>
+                        </View>
+                        <View
+                            style={{
+                                marginBottom: 30,
+                            }}>
+                            <MiniButton textButton={'Ubah foto profile akun'} />
+                        </View>
+
+                        <Text style={{ color: 'black' }}>Nama*</Text>
+                        <TextInput placeholder="Nama Lengkap" value={nama} onChangeText={val => setnama(val)} style={styles.inputText} />
+
+                        <Text style={{ color: 'black' }}>Kota*</Text>
+                        <View>
+                            <SelectList
+                                data={data2}
+                                setSelected={setSelected}
+                                dropdownStyles={{ backgroundColor: '#E2D4F0' }}
+                                dropdownItemStyles={{ marginHarizontal: 10 }}
+                                dropdownTextStyles={{ color: 'black' }}
+                                placeholder="Pilih kota"
+                                maxHeight={200}
+                                boxStyle={{ color: 'red' }}
+                            />
+                        </View>
+
+                        <Text style={{ color: 'black', marginTop: '6%' }}>Alamat*</Text>
+                        <View>
+                            <TextInput
+                                placeholder="Contoh: Jalan Ikan Hiu 333"
+                                value={alamat} onChangeText={val => setalamat(val)}
+                                style={styles.inputTextAlamat}
+                            />
+                        </View>
+
+                        <Text style={{ color: 'black' }}>No Handphone*</Text>
+                        <TextInput
+                            placeholder="contoh: +628123456789"
+                            value={no_hp} onChangeText={val => setHp(val)}
+                            style={styles.inputText}
+                        />
+
+                        <TouchableOpacity style={styles.button} onPress={() => simpan()}>
+                            <Text style={styles.buttonText}>Simpan perubahan</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
             </View>
-
-            <Text style={{color: 'black', marginTop: '6%'}}>Alamat*</Text>
-            <View>
-              <TextInput
-                placeholder="Contoh: Jalan Ikan Hiu 333"
-                value={dataAkun.address}
-                style={styles.inputTextAlamat}
-              />
-            </View>
-
-            <Text style={{color: 'black'}}>No Handphone*</Text>
-            <TextInput
-              placeholder="contoh: +628123456789"
-              value={dataAkun.phone_number}
-              style={styles.inputText}
-            />
-
-            <TouchableOpacity style={styles.button} onPress={() => terbitkan()}>
-              <Text style={styles.buttonText}>Simpan perubahan</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </View>
     </View>
   );
 };

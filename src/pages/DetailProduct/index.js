@@ -65,6 +65,7 @@ const DetailProduct = () => {
     }
     dispatch(ApiPostProduct(token, data));
   };
+  
   const imagePicker = async () => {
     ImagePicker.openPicker({
       width: 450,
@@ -73,7 +74,7 @@ const DetailProduct = () => {
     }).then(image => {
       console.log(image);
       const uploadUri =
-        Platform.OS === 'IOS' ? image.path.replace('file://', '') : image.path;
+      Platform.OS === 'IOS' ? image.path.replace('file://', '') : image.path;
       setimage(uploadUri);
     });
   };

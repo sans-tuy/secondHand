@@ -11,6 +11,8 @@ import {
   setDataOrder,
   setDataBanner,
   setDataUser,
+  setProfileData,
+
 } from '../Redux/reducer';
 import * as navigation from '../Router/rootNavigation';
 
@@ -38,7 +40,7 @@ const ApiRegister = data => () => {
 const ApiGetUser = token => dispatch => {
   axios
     .get('https://market-final-project.herokuapp.com/auth/user', {
-      headers: {access_token: `${token}`},
+      headers: { access_token: `${token}` },
     })
     .then(val => {
       dispatch(setDataUser(val.data));
@@ -49,7 +51,7 @@ const ApiGetUser = token => dispatch => {
 const ApiGetWishlist = token => dispatch => {
   axios
     .get('https://market-final-project.herokuapp.com/buyer/wishlist', {
-      headers: {access_token: `${token}`},
+      headers: { access_token: `${token}` },
     })
     .then(val => {
       dispatch(setFavorite(val.data));
@@ -60,7 +62,7 @@ const ApiGetWishlist = token => dispatch => {
 const ApiGetNotif = token => dispatch => {
   axios
     .get('https://market-final-project.herokuapp.com/buyer/wishlist', {
-      headers: {access_token: `${token}`},
+      headers: { access_token: `${token}` },
     })
     .then(val => {
       dispatch(setNotif(val.data));
@@ -84,7 +86,7 @@ const ApiGetHome = () => dispatch => {
 const ApiGetProduct = token => dispatch => {
   axios
     .get('https://market-final-project.herokuapp.com/seller/product', {
-      headers: {access_token: `${token}`},
+      headers: { access_token: `${token}` },
     })
     .then(val => {
       dispatch(setProduct(val.data));
@@ -96,7 +98,7 @@ const ApiGetProduct = token => dispatch => {
 const ApiGetProductById = (token, id) => async dispatch => {
   axios
     .get(`https://market-final-project.herokuapp.com/buyer/product/${id}`, {
-      headers: {access_token: `${token}`},
+      headers: { access_token: `${token}` },
     })
     .then(val => {
       const data = val.data;
@@ -106,7 +108,7 @@ const ApiGetProductById = (token, id) => async dispatch => {
 };
 
 const ApiPostProduct = (token, data) => async dispatch => {
-  const {name, description, base_price, location, image, category_ids} = data;
+  const { name, description, base_price, location, image, category_ids } = data;
   const formData = new FormData();
   formData.append('name', name);
   formData.append('description', description);
@@ -139,7 +141,7 @@ const ApiPostProduct = (token, data) => async dispatch => {
 const ApiOrder = (token, data) => () => {
   axios
     .post('https://market-final-project.herokuapp.com/buyer/order', data, {
-      headers: {access_token: `${token}`},
+      headers: { access_token: `${token}` },
     })
     .then(val => {
       setDataOrder(val.data);
@@ -151,7 +153,7 @@ const ApiOrder = (token, data) => () => {
 const ApiListOrderById = (token, id) => async dispatch => {
   axios
     .get(`https://market-final-project.herokuapp.com/buyer/order/${id}`, {
-      headers: {access_token: `${token}`},
+      headers: { access_token: `${token}` },
     })
     .then(val => {
       const data = val.data;
@@ -164,7 +166,7 @@ const ApiListOrderById = (token, id) => async dispatch => {
 const ApiListOrder = token => dispatch => {
   axios
     .get('https://market-final-project.herokuapp.com/buyer/order', {
-      headers: {access_token: `${token}`},
+      headers: { access_token: `${token}` },
     })
     .then(val => {
       const data = val.data;
@@ -186,6 +188,52 @@ const ApiGetBanner = () => dispatch => {
     });
 };
 
+const ApiprofileData = (accessToken) => async dispatch => { //method yang di panggil nanti di screen
+  try {
+    await axios.get('https://market-final-project.herokuapp.com/auth/user', {
+      headers: {
+        access_token: accessToken,
+      }
+    })
+      .then(value => {
+        console.log(value.data);
+        dispatch(setProfileData(value.data));
+        console.log('Get profile Success');
+
+      });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const ApiChangeDataProfile = (token, data) => async dispatch => {
+  const { full_name, city, address, image } = data;
+  const formData = new FormData();
+  formData.append('full_name', full_name);
+  formData.append('city', city);
+  formData.append('address', address);
+  formData.append('image', {
+    uri: image,
+    type: 'image/jpeg',
+    name: 'photo.jpg',
+  });
+  await axios.put(
+    'https://market-final-project.herokuapp.com/auth/user',
+    formData,
+    {
+      headers: {
+        access_token: `${token}`,
+        'Content-Type': 'multipart/form-data',
+        Accept: 'application/json',
+      },
+    },
+  )
+    .then(res => {
+      console.log('upload sukses');
+    })
+    .catch(err => console.log(err));
+};
+
 export {
   ApiLogin,
   ApiRegister,
@@ -200,4 +248,7 @@ export {
   ApiListOrderById,
   ApiGetBanner,
   ApiGetUser,
+  ApiprofileData,
+  ApiChangeDataProfile,
+
 };
